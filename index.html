@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Job Search HQ</title>
+<meta name="description" content="Matias Indacochea's private job search dashboard.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23000'/%3E%3Ctext x='32' y='42' font-family='-apple-system,Helvetica,Arial' font-weight='700' font-size='28' fill='%23f5f5f7' text-anchor='middle'%3Emi%3C/text%3E%3Ccircle cx='44' cy='18' r='4' fill='%238f81e5'/%3E%3C/svg%3E">
+<style>:root{--bg:#000000;--surface:rgba(255,255,255,.035);--surface-2:rgba(255,255,255,.06);--surface-3:rgba(255,255,255,.09);--stroke:rgba(255,255,255,.08);--stroke-2:rgba(255,255,255,.14);--text:#f5f5f7;--text-2:#a1a1a6;--text-3:#6e6e73;--text-4:#48484a;--lav-1:#cecbf7;--lav-2:#aea6f0;--lav-3:#8f81e5;--lav-4:#705dc8;--lav-tint:rgba(143,129,229,.14);--lav-tint-2:rgba(143,129,229,.24);--grad:linear-gradient(100deg,#cecbf7 0%,#aea6f0 38%,#8f81e5 70%,#705dc8 100%);--green:#30d158;--green-tint:rgba(48,209,88,.13);--amber:#ffb340;--amber-tint:rgba(255,179,64,.13);--pink:#ff8aa8;--pink-tint:rgba(255,138,168,.13);--red:#ff6961;--red-tint:rgba(255,105,97,.13);--sand:#c9b9ac;--sky:#64d2ff;--st-new:#6e6e73;--st-approved:#cecbf7;--st-applied:#aea6f0;--st-interviewing:#8f81e5;--st-offer:#30d158;--font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace;--r-lg:22px;--r-md:16px;--r-sm:12px;--ease:cubic-bezier(.2,.8,.2,1);color-scheme:dark}*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.5;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}body::before{content:"";position:fixed;inset:-20vh -10vw auto;height:70vh;background:radial-gradient(closest-side,rgba(206,203,247,.10),rgba(143,129,229,.05) 45%,transparent 75%);pointer-events:none;z-index:0}button,input,textarea,select{font:inherit;color:inherit}a{color:var(--lav-1);text-decoration:none}a:hover{text-decoration:underline}:focus-visible{outline:2px solid var(--lav-2);outline-offset:3px;border-radius:10px}::selection{background:var(--lav-tint-2)}[hidden]{display:none!important}.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}.nav-shell{position:sticky;top:0;z-index:30;padding-top:max(14px,env(safe-area-inset-top,0px));padding-bottom:10px;display:flex;justify-content:center;pointer-events:none}.nav{pointer-events:auto;display:flex;align-items:center;gap:2px;padding:5px;border-radius:999px;background:rgba(22,22,24,.72);border:1px solid var(--stroke);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);max-width:100%;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.mark{flex:none;display:grid;place-items:center;width:40px;height:36px;font-weight:700;font-size:19px;letter-spacing:-.05em;position:relative;color:var(--text);border:0;background:none;cursor:pointer}.mark::after{content:"";position:absolute;top:8px;right:9px;width:5px;height:5px;border-radius:50%;background:var(--lav-3)}.nav button.tab{flex:none;border:0;background:none;color:var(--text-2);font-size:14.5px;font-weight:500;padding:8px 14px;border-radius:999px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:color .2s,background .2s}.nav button.tab:hover{color:var(--text)}.nav button.tab[aria-selected="true"]{background:var(--surface-3);color:var(--text)}.nav .badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--lav-tint-2);color:var(--lav-1);font-size:11px;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}.nav .cta{flex:none;margin-left:4px;border:0;background:var(--text);color:#000;font-weight:600;font-size:14px;padding:8px 16px;border-radius:999px;cursor:pointer}.eyebrow{color:var(--lav-2);font-size:14px;font-weight:600;letter-spacing:-.005em;margin:0 0 10px}.display{font-size:clamp(40px,6.6vw,84px);line-height:.98;font-weight:700;letter-spacing:-.05em;margin:0;text-wrap:balance}.h2{font-size:clamp(30px,4.2vw,52px);line-height:1.02;font-weight:700;letter-spacing:-.042em;margin:0;text-wrap:balance}.h3{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:0}.dim{color:var(--text-3)}.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}.lede{font-size:clamp(17px,1.6vw,20px);line-height:1.5;color:var(--text-2);max-width:62ch;margin:18px 0 0;letter-spacing:-.015em}.lede b{color:var(--text);font-weight:600}.small{font-size:13px;color:var(--text-3)}.num{font-variant-numeric:tabular-nums}.status{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 9px;min-height:34px;padding:6px 14px;border-radius:999px;background:var(--surface-2);border:1px solid var(--stroke);font-size:14px;color:var(--text);margin-bottom:26px}.live{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(48,209,88,.5);animation:pulse 2.4s infinite}.live.warn{background:var(--amber);animation:none}.status .sep{color:var(--text-4)}main{padding-bottom:120px}.view{padding-top:34px}.section{margin-top:64px}.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:24px}.card{background:var(--surface);border:1px solid var(--stroke);border-radius:var(--r-lg);padding:22px;min-width:0;position:relative}.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}.card-h .h3{font-size:17px}.grid-2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:44px}.kpi{padding:20px 20px 16px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:border-color .25s,transform .25s var(--ease),background .25s;text-align:left;color:inherit}.kpi:hover{border-color:var(--stroke-2);transform:translateY(-2px);background:var(--surface-2)}.kpi-l{font-size:14px;color:var(--text-2);font-weight:500}.kpi-n{font-size:48px;line-height:1.05;font-weight:700;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.kpi-s{font-size:13px;color:var(--text-3);display:flex;gap:6px;align-items:center;min-height:20px}.up{color:var(--green);font-weight:600}.spark{display:block;width:100%;height:36px;margin-top:8px;overflow:visible}.funnel{display:flex;flex-direction:column;gap:14px}.f-row{display:grid;grid-template-columns:110px minmax(0,1fr) 48px;align-items:start;gap:14px}.f-label,.f-n{line-height:30px}.f-label{font-size:14px;color:var(--text-2);display:flex;align-items:center;gap:8px}.f-label i{width:8px;height:8px;border-radius:3px;flex:none}.f-track{height:30px;border-radius:9px;background:var(--surface-2);overflow:hidden;position:relative}.f-fill{height:100%;border-radius:9px;width:var(--w);min-width:3px;transition:width .9s var(--ease)}.f-n{font-size:17px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}.f-conv{font-size:12px;color:var(--text-3);margin-top:5px;padding-left:2px}.chart{width:100%;height:220px;display:block;overflow:visible}.chart text{fill:var(--text-3);font-size:11.5px;font-family:var(--font)}.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--text-2)}.legend span{display:inline-flex;align-items:center;gap:7px}.legend i{width:9px;height:9px;border-radius:3px}.donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}.donut{width:150px;height:150px;flex:none}.donut circle{fill:none;stroke-width:16;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dasharray .9s var(--ease)}.donut text{fill:var(--text);font-family:var(--font)}.dl{display:flex;flex-direction:column;gap:10px;font-size:14px;min-width:0}.dl div{display:flex;align-items:center;gap:10px}.dl i{width:10px;height:10px;border-radius:3px;flex:none}.dl b{font-weight:600;margin-left:auto;padding-left:14px;font-variant-numeric:tabular-nums}.needs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}.need{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid transparent;text-align:left;cursor:pointer;color:inherit;transition:border-color .2s,background .2s}.need:hover{border-color:var(--stroke-2);background:var(--surface-2)}.need-ic{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:14px}.need-t{flex:1;min-width:0}.need-t b{display:block;font-weight:600;font-size:15px;letter-spacing:-.015em}.need-t span{display:block;font-size:13px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.arrow{color:var(--text-3);flex:none;transition:transform .2s}.need:hover .arrow{transform:translateX(3px);color:var(--text)}.ic-lav{background:var(--lav-tint);color:var(--lav-1)}.ic-green{background:var(--green-tint);color:var(--green)}.ic-amber{background:var(--amber-tint);color:var(--amber)}.ic-red{background:var(--red-tint);color:var(--red)}.ic-pink{background:var(--pink-tint);color:var(--pink)}.days{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}.day{border-radius:12px;padding:10px 8px;background:var(--surface);border:1px solid var(--stroke);min-height:96px;display:flex;flex-direction:column;gap:6px;min-width:0}.day.today{border-color:var(--lav-3);background:var(--lav-tint)}.day.over{border-color:rgba(255,105,97,.4);background:var(--red-tint)}.day-h{font-size:11.5px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em}.day-n{font-size:20px;font-weight:700;letter-spacing:-.04em;line-height:1}.ev{font-size:11.5px;line-height:1.25;padding:4px 6px;border-radius:7px;background:var(--surface-3);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:0;text-align:left;cursor:pointer;width:100%}.ev.f{background:var(--amber-tint);color:var(--amber)}.ev.s{background:var(--lav-tint);color:var(--lav-1)}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}.search{flex:1 1 260px;display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border-radius:999px;background:var(--surface-2);border:1px solid var(--stroke);min-width:0}.search input{flex:1;min-width:0;border:0;background:none;outline:none;font-size:15.5px}.search input::placeholder{color:var(--text-3)}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{height:38px;padding:0 15px;border-radius:999px;border:1px solid var(--stroke);background:transparent;color:var(--text-2);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}.chip:hover{color:var(--text);border-color:var(--stroke-2)}.chip[aria-pressed="true"]{background:var(--text);color:#000;border-color:var(--text)}.chip .n{margin-left:6px;opacity:.55;font-variant-numeric:tabular-nums}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--stroke-2);background:rgba(255,255,255,.06);color:var(--text);font-size:14.5px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none!important;transition:transform .15s,background .2s,border-color .2s}.btn:hover{background:rgba(255,255,255,.1)}.btn:active{transform:scale(.97)}.btn-white{background:var(--text);color:#000;border-color:var(--text)}.btn-white:hover{background:#fff}.btn-approve{background:var(--green);color:#03210d;border-color:var(--green)}.btn-approve:hover{background:#4ade73}.btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}.btn-ghost:hover{color:var(--text);background:var(--surface-2)}.btn-sm{height:32px;padding:0 13px;font-size:13px}.btn.on{background:var(--green-tint);border-color:transparent;color:var(--green)}.btn[disabled]{opacity:.4;pointer-events:none}.jobs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}.job{background:var(--surface);border:1px solid var(--stroke);border-radius:var(--r-lg);padding:22px;display:flex;flex-direction:column;gap:14px;cursor:pointer;min-width:0;transition:transform .3s var(--ease),border-color .3s,background .3s}.job:hover{transform:translateY(-3px);border-color:var(--stroke-2);background:var(--surface-2)}.job-top{display:flex;gap:14px;align-items:flex-start}.logo{flex:none;width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-weight:700;font-size:17px;letter-spacing:-.03em;color:#fff;position:relative;overflow:hidden}.logo::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.18),transparent 55%)}.co{font-size:14px;color:var(--text-2);font-weight:500}.job h3{margin:2px 0 0;font-size:19px;line-height:1.22;font-weight:600;letter-spacing:-.025em;text-wrap:balance}.meta{font-size:14px;color:var(--text-3)}.tags{display:flex;flex-wrap:wrap;gap:6px}.tag{height:24px;display:inline-flex;align-items:center;padding:0 9px;border-radius:7px;background:var(--surface-3);color:var(--text-2);font-size:12px;font-weight:600;white-space:nowrap}.tag-green{background:var(--green-tint);color:var(--green)}.tag-lav{background:var(--lav-tint);color:var(--lav-1)}.tag-amber{background:var(--amber-tint);color:var(--amber)}.tag-red{background:var(--red-tint);color:var(--red)}.tag-pink{background:var(--pink-tint);color:var(--pink)}.note{margin:0;font-size:14px;line-height:1.5;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.job-actions{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:4px}.job-actions .grow{flex:1}.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}.col{border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--stroke);padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}.col-h{display:flex;align-items:center;gap:9px;padding:4px 6px 6px;font-weight:600;font-size:15px}.col-h i{width:9px;height:9px;border-radius:3px}.col-h .n{margin-left:auto;color:var(--text-3);font-weight:500;font-variant-numeric:tabular-nums}.pc{width:100%;text-align:left;color:inherit;border:1px solid var(--stroke);background:var(--surface-2);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:7px;cursor:pointer;transition:border-color .2s,transform .2s var(--ease)}.pc:hover{border-color:var(--stroke-2);transform:translateY(-2px)}.pc h4{margin:0;font-size:15px;font-weight:600;line-height:1.3;letter-spacing:-.015em}.pc .sm{font-size:12.5px;color:var(--text-3);overflow-wrap:anywhere}.col-empty{font-size:13.5px;color:var(--text-3);padding:8px 6px 6px}.progress{height:4px;border-radius:2px;background:var(--surface-3);overflow:hidden}.progress span{display:block;height:100%;background:var(--grad);border-radius:2px}.list{border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--stroke);overflow:hidden}.row{display:flex;gap:16px;align-items:flex-start;padding:18px 20px;min-width:0}.row+.row{border-top:1px solid var(--stroke)}.row-main{flex:1;min-width:0}.row-t{font-weight:600;font-size:16px;letter-spacing:-.015em;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}.row-t small{font-weight:400;color:var(--text-3);font-size:14px}.row-s{font-size:14px;color:var(--text-2);margin-top:3px;overflow-wrap:anywhere}.row-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex:none}.acts{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:600;background:var(--surface-3);color:var(--text-2)}.due{font-size:13px;font-weight:600;white-space:nowrap}.due.over{color:var(--red)}.due.soon{color:var(--amber)}.due.later{color:var(--text-3)}.ob{margin-bottom:16px}.ob-h{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;border-bottom:1px solid var(--stroke)}.ob-h .logo{width:38px;height:38px;font-size:14px;border-radius:11px}.contact{display:flex;gap:14px;padding:18px 20px;min-width:0}.contact+.contact{border-top:1px solid var(--stroke)}.c-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}.c-name{font-weight:600;font-size:15.5px}.c-name span{font-weight:400;color:var(--text-3);font-size:14px;margin-left:6px}.c-why{font-size:13.5px;color:var(--text-2)}.msg{border-radius:14px;background:rgba(255,255,255,.025);border:1px solid var(--stroke)}.msg summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--text-2)}.msg summary::-webkit-details-marker{display:none}.msg summary::after{content:"Show draft";color:var(--lav-2);font-weight:500;flex:none}.msg[open] summary::after{content:"Hide"}.msg pre{margin:0;padding:0 14px 14px;white-space:pre-wrap;font-family:var(--font);font-size:14.5px;line-height:1.6;color:var(--text);overflow-wrap:anywhere}.stateline{display:flex;align-items:center;gap:10px;padding:16px 20px;font-size:14px;color:var(--text-2)}.spin{width:15px;height:15px;border-radius:50%;border:2px solid var(--surface-3);border-top-color:var(--lav-2);animation:spin .9s linear infinite;flex:none}.tpl{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}.tpl-list{display:flex;flex-direction:column;gap:6px;position:sticky;top:84px}.tpl-group{font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin:14px 6px 4px}.tpl-group:first-child{margin-top:0}.tpl-item{width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--text-2);padding:11px 14px;border-radius:13px;cursor:pointer;display:flex;flex-direction:column;gap:2px;transition:all .2s}.tpl-item b{color:var(--text);font-weight:600;font-size:14.5px}.tpl-item span{font-size:12.5px;color:var(--text-3)}.tpl-item:hover{background:var(--surface)}.tpl-item[aria-pressed="true"]{background:var(--surface-2);border-color:var(--stroke-2)}.fill{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}.fill .wide{grid-column:1/-1}.preview{border-radius:16px;background:rgba(255,255,255,.025);border:1px solid var(--stroke);padding:18px 20px}.preview .subj{font-size:13px;color:var(--text-3);margin-bottom:10px}.preview .subj b{color:var(--text);font-weight:600}.preview pre{margin:0;white-space:pre-wrap;font-family:var(--font);font-size:15px;line-height:1.65;overflow-wrap:anywhere}.var{background:var(--lav-tint);color:var(--lav-1);border-radius:5px;padding:0 4px}.var.miss{background:var(--amber-tint);color:var(--amber)}.counter{font-size:12.5px;color:var(--text-3);font-variant-numeric:tabular-nums}.counter.over{color:var(--red);font-weight:600}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field label{font-size:13px;font-weight:600;color:var(--text-2)}.input,.textarea,.select{width:100%;min-width:0;border:1px solid var(--stroke);background:var(--surface-2);border-radius:12px;padding:11px 14px;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}.input:focus,.textarea:focus,.select:focus{border-color:var(--lav-3);box-shadow:0 0 0 4px var(--lav-tint)}.textarea{min-height:96px;resize:vertical;line-height:1.5}.select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-3) 50%),linear-gradient(135deg,var(--text-3) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}.input::placeholder,.textarea::placeholder{color:var(--text-4)}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.form-grid .wide{grid-column:1/-1}.hint{font-size:12.5px;color:var(--text-3)}.kv{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;font-size:14px;margin:0}.kv dt{color:var(--text-3)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}.empty{border-radius:var(--r-lg);border:1px dashed var(--stroke-2);padding:56px 24px;text-align:center}.empty h3{margin:0 0 8px;font-size:22px;font-weight:600;letter-spacing:-.025em}.empty p{margin:0 auto;color:var(--text-2);max-width:48ch}.drawer-wrap{position:fixed;inset:0;z-index:60}.scrim{position:absolute;inset:0;background:rgba(0,0,0,.55);animation:fade .25s ease}.drawer{position:absolute;top:0;right:0;bottom:0;width:min(620px,100%);background:rgba(18,18,20,.9);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);border-left:1px solid var(--stroke);display:flex;flex-direction:column;animation:slide .4s var(--ease)}.drawer-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(16px,env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-right,0px)) 14px 22px;border-bottom:1px solid var(--stroke)}.drawer-bar .small{font-weight:600;color:var(--text-2)}.drawer-body{flex:1;overflow-y:auto;padding:24px max(22px,env(safe-area-inset-right,0px)) max(40px,env(safe-area-inset-bottom,0px)) 22px;display:flex;flex-direction:column;gap:16px}.d-hero{display:flex;gap:16px;align-items:flex-start}.d-hero .logo{width:58px;height:58px;font-size:22px;border-radius:16px}.d-hero h2{margin:3px 0 6px;font-size:28px;line-height:1.08;font-weight:700;letter-spacing:-.04em;text-wrap:balance}.steps{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--surface-2);border:1px solid var(--stroke);flex-wrap:wrap}.steps button{flex:1 1 auto;border:0;background:none;color:var(--text-2);padding:9px 10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}.steps button[aria-pressed="true"]{background:var(--text);color:#000}.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}.timeline li{display:grid;grid-template-columns:16px 64px 1fr;gap:10px;font-size:14px;padding:6px 0;position:relative}.timeline li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lav-3);margin-top:7px}.timeline time{color:var(--text-3);font-variant-numeric:tabular-nums}.lock{min-height:calc(100vh - 80px);display:grid;place-items:center;padding:40px 0 80px}.lock-in{width:min(560px,100%);text-align:center}.lock .card{text-align:left;margin-top:36px;padding:26px}.lock ol{margin:0 0 18px;padding-left:20px;color:var(--text-2);font-size:14.5px;display:flex;flex-direction:column;gap:6px}.err{color:var(--red);font-size:14px;margin-top:10px}.toast{position:fixed;left:50%;bottom:max(28px,calc(env(safe-area-inset-bottom,0px) + 18px));transform:translateX(-50%);z-index:80;background:var(--text);color:#000;padding:12px 18px;border-radius:999px;font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:14px;max-width:calc(100% - 32px);box-shadow:0 18px 50px rgba(0,0,0,.5);animation:pop .35s var(--ease)}.toast button{border:0;background:none;color:#000;font-weight:700;text-decoration:underline;cursor:pointer;padding:0}.intro .rise{animation:rise .8s var(--ease) both}.intro .rise:nth-child(2){animation-delay:.06s}.intro .rise:nth-child(3){animation-delay:.12s}.intro .rise:nth-child(4){animation-delay:.18s}.intro .rise:nth-child(5){animation-delay:.24s}.intro .rise:nth-child(6){animation-delay:.3s}.intro .f-fill{animation:grow 1.1s var(--ease) both .25s}.intro .bar-r{animation:barup .9s var(--ease) both;transform-box:fill-box;transform-origin:bottom}.intro .spark path.line{stroke-dasharray:400;animation:draw 1.4s var(--ease) both .2s}@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes grow{from{width:0}}@keyframes barup{from{transform:scaleY(0)}}@keyframes draw{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(48,209,88,.45)}70%{box-shadow:0 0 0 8px rgba(48,209,88,0)}100%{box-shadow:0 0 0 0 rgba(48,209,88,0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes slide{from{transform:translateX(48px);opacity:0}}@keyframes fade{from{opacity:0}}@keyframes pop{from{transform:translate(-50%,10px);opacity:0}}@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}@media (max-width:1020px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.board{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:minmax(0,1fr)}}@media (max-width:860px){.grid-2{grid-template-columns:minmax(0,1fr)}.tpl{grid-template-columns:minmax(0,1fr)}.tpl-list{position:static;flex-direction:row;overflow-x:auto;padding-bottom:6px}.tpl-group{display:none}.tpl-item{flex:none;width:210px}.days{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (max-width:560px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}.kpis{gap:10px}.kpi{padding:16px 14px 12px}.kpi-n{font-size:38px}.board{grid-template-columns:minmax(0,1fr)}.jobs{grid-template-columns:minmax(0,1fr)}.form-grid,.fill{grid-template-columns:minmax(0,1fr)}.f-row{grid-template-columns:86px minmax(0,1fr) 36px;gap:10px}.row{flex-wrap:wrap;padding:16px}.row-side{align-items:flex-start;width:100%}.acts{justify-content:flex-start}.nav .cta{display:none}.status .sep,.status .dim{display:none}.section{margin-top:48px}}</style>
+</head>
+<body>
+<div class="nav-shell"><nav class="nav" id="nav" aria-label="Sections"></nav></div>
+<main class="wrap" id="app"><div class="lock"><div class="lock-in"><p class="eyebrow">Job Search HQ</p><h1 class="display">Loading<span class="dim">…</span></h1></div></div></main>
+<div class="drawer-wrap" id="drawer" hidden><div class="scrim" data-act="close"></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"><div class="drawer-bar"><span class="small" id="drawer-title">Details</span><button class="btn btn-sm" data-act="close" type="button">Done</button></div><div class="drawer-body" id="drawer-body"></div></aside></div>
+<div id="toast-root"></div>
+<script>
+(() => {
+"use strict";
+const DEFAULT_REPO = "Indo1919/job-search-hq-data";
+const FILES = { jobs: "data/jobs.json", network: "data/network.json", settings: "data/settings.json" };
+const API = "https://api.github.com";
+const CFG_KEY = "jobhq.config.v1";
+const TABS = [
+{k:"overview", label:"Overview"}, {k:"discover", label:"Discover"}, {k:"pipeline", label:"Pipeline"},
+{k:"outreach", label:"Outreach"}, {k:"network", label:"Network"}, {k:"templates", label:"Templates"}, {k:"setup", label:"Settings"},
+];
+const STAGES = [
+{k:"new", label:"New", color:"var(--st-new)"},
+{k:"approved", label:"Approved", color:"var(--st-approved)"},
+{k:"applied", label:"Applied", color:"var(--st-applied)"},
+{k:"interviewing", label:"Interviewing", color:"var(--st-interviewing)"},
+{k:"offer", label:"Offer", color:"var(--st-offer)"},
+];
+const STATUS = [{k:"new",l:"Lead"},{k:"approved",l:"Approved"},{k:"applied",l:"Applied"},{k:"interviewing",l:"Interviewing"},{k:"offer",l:"Offer"},{k:"closed",l:"Closed"}];
+const RANK = {passed:-1, new:0, approved:1, applied:2, interviewing:3, offer:4, closed:2};
+const NET = {waiting:["Waiting on them",""], replied:["They replied","tag-green"], scheduled:["Meeting set","tag-lav"], warm:["Warm","tag-lav"], cold:["No reply","tag-amber"], followup:["Your move","tag-amber"]};
+const LOGO_BG = ["linear-gradient(135deg,#8f81e5,#705dc8)","linear-gradient(135deg,#ff8aa8,#c2302b)","linear-gradient(135deg,#64d2ff,#0a84ff)","linear-gradient(135deg,#30d158,#1f8f45)","linear-gradient(135deg,#ffb340,#d97706)","linear-gradient(135deg,#c9b9ac,#8a7768)","linear-gradient(135deg,#cecbf7,#8f81e5)","linear-gradient(135deg,#5e5ce6,#3634a3)","linear-gradient(135deg,#ff6961,#b3261e)","linear-gradient(135deg,#a1a1a6,#48484a)"];
+const TEMPLATES = [
+{id:"rec-email", group:"Recruiters", name:"Recruiter email after applying", when:"Same day you apply. Highest-signal first touch.", channel:"Email",
+subject:"{role} (Job {job_number}) — Matias Indacochea",
+body:"Hi {first_name},\n\nI just applied for the {role} role at {company} (Job {job_number}) and wanted to reach out directly. I'm a UI/UX designer working at the intersection of design and AI. I studied Industrial & Interaction Design at Syracuse and I'm now doing my Master's in Digital Product Design at Parsons here in New York.\n\n{context}\n\nMy work is here: {portfolio}. If you're the right person for this role, I'd love 15 minutes to talk about the team. If not, I'd really appreciate knowing who is.\n\nThanks so much,\nMatias\n{linkedin}",
+contextHint:"One line on why this team. Example: I took Scowtt's brand and UI system from zero through its Series A, and your team is at a similar stage."},
+{id:"rec-li", group:"Recruiters", name:"Recruiter LinkedIn note", when:"Connection request. Keep it under 300 characters.", channel:"LinkedIn", limit:300,
+body:"Hi {first_name}, I just applied for the {role} role at {company} (Job {job_number}). I'm a UI/UX designer focused on AI products, now at Parsons in NYC. Would love to connect and hear what the team looks for. Work: {portfolio}"},
+{id:"hm-email", group:"Hiring team", name:"Hiring manager email", when:"After applying, when you can find the design lead or manager.", channel:"Email",
+subject:"{role} at {company}",
+body:"Hi {first_name},\n\nI applied for the {role} role on your team (Job {job_number}) and wanted to say hello directly. {context}\n\nA bit about me: I joined Jetzy as a design intern and was promoted to Head of Design within a month, and I built Scowtt's brand and UI system from zero through its Series A. Most recently I designed and built Halo, an AI work-visibility tool, as my capstone for Stanford's UX Design for AI Products.\n\nHere's my work: {portfolio}. I'd love to hear what your team is focused on and whether my background could help.\n\nThanks so much,\nMatias",
+contextHint:"What caught your eye about their product. Example: I've been using the new onboarding flow and loved how it handles empty states."},
+{id:"designer-li", group:"Hiring team", name:"Designer on the team", when:"Peer designer. Ask about the work, not for a referral.", channel:"LinkedIn", limit:300,
+body:"Hi {first_name}, I'm a product designer in NYC (Parsons) and I've been following {company}'s work. {context} Would you be up for a quick 15-minute chat about how your team works? Happy to work around your schedule.",
+contextHint:"One specific thing about their work, kept short."},
+{id:"alum-li", group:"Hiring team", name:"Alum at the company", when:"Shared school opens doors. Lead with it.", channel:"LinkedIn", limit:300,
+body:"Hi {first_name}, fellow {school} grad here. I'm a UI/UX designer now at Parsons, and I'm applying for the {role} role at {company}. Would you have 15 minutes to tell me what the team is like? It would mean a lot."},
+{id:"fu-1", group:"Follow-ups", name:"Follow-up, one week later", when:"Seven days after your first message with no reply.", channel:"Email",
+subject:"Re: {role} (Job {job_number})",
+body:"Hi {first_name},\n\nI wanted to follow up on my note from last week about the {role} role. I'm still really excited about {company}, and I'd love to find a time to talk whenever works for you.\n\nHere's my portfolio again in case it's useful: {portfolio}\n\nThanks so much,\nMatias"},
+{id:"fu-2", group:"Follow-ups", name:"Final nudge, two weeks later", when:"Last touch. Ask for the right person, then let it rest.", channel:"Email",
+subject:"Re: {role} (Job {job_number})",
+body:"Hi {first_name},\n\nOne last note on the {role} role. I know things get busy, so no pressure at all. If there's someone else on the team I should reach out to, I'd really appreciate the pointer.\n\nEither way, thanks for your time.\n\nMatias"},
+{id:"thanks", group:"Interviews", name:"Thank you after an interview", when:"Within 24 hours. Reference something specific.", channel:"Email",
+subject:"Thank you — {role}",
+body:"Hi {first_name},\n\nThank you for taking the time to talk today. I really enjoyed hearing about {context}. It made me even more excited about the {role} role and the chance to work with your team.\n\nIf there's anything else I can share, I'm happy to send it over.\n\nLooking forward to it,\nMatias",
+contextHint:"The specific thing you talked about. Example: how the team is rebuilding the design system around AI features."},
+{id:"close", group:"Interviews", name:"Gracious close after a no", when:"Keeps the door open. Tim at Baxter is the model.", channel:"Email",
+subject:"Re: {role}",
+body:"Hi {first_name},\n\nThanks for letting me know, and for the time you and the team gave me. I really enjoyed learning about {company}. I'd love to stay in touch, and if anything opens up that fits, I'd be glad to hear about it.\n\nBest,\nMatias"},
+{id:"catchup", group:"Networking", name:"Catching up with a contact", when:"Warm contacts you haven't talked to in a while.", channel:"Email",
+subject:"Catching up",
+body:"Hi {first_name},\n\nHope you've been well! It's been a while since we talked, so I wanted to check in and share where I've landed. I moved to New York and started my Master's at Parsons, and I'm looking for full-time product design roles on AI-focused teams.\n\n{context}\n\nI'd love to catch up and hear what you've been working on. I'm flexible on timing, so whatever works for you.\n\nBest,\nMatias",
+contextHint:"Something personal or recent. Example: I just finished Halo, an AI work-visibility tool, and thought of our conversation about tooling."},
+{id:"referral", group:"Networking", name:"Referral ask after a conversation", when:"Only after you've talked. Make it easy to say yes or no.", channel:"Email",
+subject:"{role} at {company}",
+body:"Hi {first_name},\n\nThanks again for the time last week, it really helped. I just applied for the {role} role at {company} (Job {job_number}).\n\nIf you feel comfortable, would you be open to referring me or passing my portfolio along to the hiring manager? {portfolio}\n\nTotally understand if not. Thanks so much either way.\n\nMatias"},
+{id:"info", group:"Networking", name:"Informational chat request", when:"Cold-ish outreach to someone whose path you admire.", channel:"LinkedIn", limit:300,
+body:"Hi {first_name}, I'm a UI/UX designer at Parsons working on AI products. {context} Would you be open to a 15-minute chat about how you got into your role? I'd really value your perspective."},
+];
+const S = {
+cfg: loadCfg(), connected:false, loading:true, error:"",
+data:{jobs:{}, network:{}, settings:{profile:{}, app:{}, templates:{}}},
+sha:{}, etag:{}, tab:"overview", filter:"all", q:"", drawer:null, intro:true, animatedOnce:false,
+tpl:{id:"rec-email", job:"", first:"", school:"Syracuse", context:"", editing:false},
+netForm:false, lastSync:null,
+};
+const h0 = (location.hash||"").slice(1);
+if (TABS.some(t => t.k === h0)) S.tab = h0;
+function loadCfg(){ try { return JSON.parse(localStorage.getItem(CFG_KEY)) || {}; } catch { return {}; } }
+function saveCfg(c){ S.cfg = c; try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch {} }
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; } };
+const now = () => new Date().toISOString();
+const DAY = 864e5;
+const ts = s => { const t = s ? Date.parse(s) : NaN; return isNaN(t) ? null : t; };
+const sod = t => { const d = new Date(t); d.setHours(0,0,0,0); return d.getTime(); };
+const dayDiff = s => { const t = ts(s); return t == null ? null : Math.round((sod(t) - sod(Date.now())) / DAY); };
+const fmtDate = s => { const t = ts(s); return t == null ? "" : new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeric"}); };
+const fmtTime = s => { const t = ts(s); return t == null ? "" : new Date(t).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"}); };
+function rel(s){ const t = ts(s); if (t == null) return ""; const d = (Date.now()-t)/1000; if (d < 60) return "just now"; if (d < 3600) return `${Math.round(d/60)} min ago`; if (d < 86400) return `${Math.round(d/3600)}h ago`; const n = Math.round(d/86400); if (n < 7) return `${n}d ago`; if (n < 35) return `${Math.round(n/7)}w ago`; return fmtDate(s); }
+function due(s){ const d = dayDiff(s); if (d == null) return null; if (d < 0) return {c:"over", t:`Overdue ${-d}d`}; if (d === 0) return {c:"soon", t:"Due today"}; if (d === 1) return {c:"soon", t:"Tomorrow"}; return {c:"later", t:fmtDate(s)}; }
+const addDays = (s, n) => new Date((ts(s) ?? Date.now()) + n*DAY).toISOString();
+const toDateInput = s => { const t = ts(s); if (t == null) return ""; const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const fromDateInput = v => v ? new Date(v + "T12:00:00").toISOString() : null;
+const hash = s => { let h = 0; for (const c of String(s)) h = (h*31 + c.charCodeAt(0)) | 0; return Math.abs(h); };
+const initials = n => String(n||"?").replace(/&/g," ").split(/\s+/).filter(w => /\w/.test(w)).slice(0,2).map(w => w[0]).join("").toUpperCase() || "?";
+const logo = name => `<div class="logo" style="background:${LOGO_BG[hash(name) % LOGO_BG.length]}" aria-hidden="true">${esc(initials(name))}</div>`;
+const jobs = () => Object.values(S.data.jobs);
+const nets = () => Object.values(S.data.network);
+const contactsOf = j => Array.isArray(j.contacts) ? j.contacts : [];
+const pending = j => contactsOf(j).filter(c => c.status !== "sent").length;
+const isNYC = j => /new york|nyc|\bny\b|new rochelle|jersey city|brooklyn/i.test(j.location||"");
+const isRemote = j => /remote/i.test(`${j.location||""} ${j.workplace||""}`);
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
+const plural = (n, w, p) => `${n} ${n === 1 ? w : (p || w + "s")}`;
+const profile = () => S.data.settings.profile || {};
+const app = () => S.data.settings.app || {};
+let toastT;
+function toast(msg, action){
+const root = $("toast-root");
+root.innerHTML = `<div class="toast" role="status"><span>${esc(msg)}</span>${action ? `<button type="button" id="toast-act">${esc(action.label)}</button>` : ""}</div>`;
+if (action) $("toast-act").onclick = () => { root.innerHTML = ""; action.run(); };
+clearTimeout(toastT); toastT = setTimeout(() => { root.innerHTML = ""; }, action ? 6500 : 3800);
+}
+function b64encode(str){ const bytes = new TextEncoder().encode(str); let bin = ""; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+function b64decode(b64){ const bin = atob(b64.replace(/\s/g,"")); const bytes = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+async function gh(path, opts = {}){
+const headers = {"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","Authorization":`Bearer ${S.cfg.token}`, ...(opts.headers||{})};
+const res = await fetch(API + path, {...opts, headers, cache:"no-store"});
+return res;
+}
+const repoPath = () => `/repos/${S.cfg.repo}`;
+async function readFile(name, conditional){
+const headers = conditional && S.etag[name] ? {"If-None-Match": S.etag[name]} : {};
+const res = await gh(`${repoPath()}/contents/${FILES[name]}`, {headers});
+if (res.status === 304) return {unchanged:true};
+if (res.status === 404) return {data:null, sha:null};
+if (!res.ok) { const e = new Error(`GitHub ${res.status}`); e.status = res.status; throw e; }
+const body = await res.json();
+S.etag[name] = res.headers.get("ETag") || "";
+return {data: JSON.parse(b64decode(body.content || "") || "null"), sha: body.sha};
+}
+async function writeFile(name, data, sha, message){
+const res = await gh(`${repoPath()}/contents/${FILES[name]}`, {method:"PUT", headers:{"Content-Type":"application/json"},
+body: JSON.stringify({message: message || `Update ${name}`, content: b64encode(JSON.stringify(data, null, 1) + "\n"), ...(sha ? {sha} : {})})});
+if (!res.ok) { const e = new Error(`GitHub ${res.status}`); e.status = res.status; throw e; }
+const body = await res.json();
+S.etag[name] = "";
+return body.content.sha;
+}
+const DEFAULTS = {jobs:{}, network:{}, settings:{profile:{}, app:{}, templates:{}}};
+async function mutate(name, fn, message){
+let lastErr;
+for (let attempt = 0; attempt < 4; attempt++) {
+try {
+const cur = await readFile(name, false);
+const base = cur.data ?? structuredClone(DEFAULTS[name]);
+const next = fn(structuredClone(base)) ?? base;
+const sha = await writeFile(name, next, cur.sha, message);
+S.data[name] = next; S.sha[name] = sha; S.lastSync = now();
+return next;
+} catch (e) {
+lastErr = e;
+if (![409, 422].includes(e.status)) break;
+await new Promise(r => setTimeout(r, 300 + Math.random()*500));
+}
+}
+throw lastErr;
+}
+async function save(name, fn, message, okMsg){
+const before = structuredClone(S.data[name]);
+try { S.data[name] = fn(structuredClone(S.data[name])) ?? S.data[name]; render(); } catch {}
+try { await mutate(name, fn, message); render(); if (okMsg) toast(okMsg); return true; }
+catch (e) {
+S.data[name] = before; render();
+toast(e.status === 401 ? "Your access token expired. Reconnect in Settings." : e.status === 403 || e.status === 404 ? "This token can't write to your data repo. Check its permissions in Settings." : "Couldn't save to GitHub. Check your connection and try again.");
+return false;
+}
+}
+async function loadAll(conditional){
+const names = Object.keys(FILES);
+const results = await Promise.all(names.map(n => readFile(n, conditional)));
+let changed = false;
+results.forEach((r, i) => { const n = names[i]; if (r.unchanged) return; S.data[n] = r.data ?? structuredClone(DEFAULTS[n]); S.sha[n] = r.sha; changed = true; });
+S.data.settings.profile ||= {}; S.data.settings.app ||= {}; S.data.settings.templates ||= {};
+S.lastSync = now();
+return changed;
+}
+async function connect(repo, token){
+saveCfg({repo, token});
+const res = await gh(repoPath());
+if (res.status === 401) throw new Error("GitHub didn't accept that token. Check you copied all of it.");
+if (res.status === 404) throw new Error(`This token can't see ${repo}. Give it access to that repository.`);
+if (!res.ok) throw new Error(`GitHub returned ${res.status}. Try again in a moment.`);
+await loadAll(false);
+S.connected = true;
+}
+let readyResolve; const ready = new Promise(r => { readyResolve = r; });
+window.jobhq = Object.freeze({
+version: "1.0",
+ready,
+async refresh(){ await loadAll(false); render(); return true; },
+async get(){ await loadAll(false); render(); return structuredClone(S.data); },
+async summary(){ await loadAll(false); return jobs().map(j => ({id:j.id, company:j.company, role:j.role, status:j.status, linkedinJobId:j.linkedinJobId||null, outreach:j.outreach?.state||null, contacts:contactsOf(j).length, approvedAt:j.approvedAt||null})); },
+async job(id){ await loadAll(false); return structuredClone(S.data.jobs[id] || null); },
+async update(name, fn, message){ if (!FILES[name]) throw new Error("name must be jobs, network or settings"); const r = await mutate(name, fn, message || `Automation: update ${name}`); render(); return Object.keys(r).length; },
+async log(text){ await mutate("settings", s => { s.app ||= {}; s.app.log = [...(s.app.log||[]), {at:now(), text:String(text)}].slice(-60); return s; }, "Automation: activity log"); render(); return true; },
+});
+const touch = (j, text) => [...(Array.isArray(j.timeline) ? j.timeline : []), {at:now(), text}].slice(-80);
+function approve(id){
+const j = S.data.jobs[id]; if (!j) return;
+save("jobs", d => { const x = d[id]; if (!x) return d; x.status = "approved"; x.approvedAt ||= now(); x.outreach = {state:"queued", updatedAt:now(), note:"Queued — Claude starts within the hour"}; x.timeline = touch(x, "Approved — outreach queued"); return d; },
+`Approve ${j.company} — ${j.role}`, `Approved. Claude will find people at ${j.company} within the hour.`);
+}
+function pass(id){
+const j = S.data.jobs[id]; if (!j) return; const prev = j.status;
+save("jobs", d => { const x = d[id]; if (x) { x.status = "passed"; x.timeline = touch(x, "Passed"); } return d; }, `Pass on ${j.company}`).then(ok => {
+if (ok) toast(`Passed on ${j.company}.`, {label:"Undo", run: () => save("jobs", d => { const x = d[id]; if (x) { x.status = prev; x.timeline = touch(x, "Restored"); } return d; }, `Restore ${j.company}`)});
+});
+}
+function setStatus(id, k){
+const j = S.data.jobs[id]; if (!j || j.status === k) return;
+if (k === "approved" && !contactsOf(j).length) return approve(id);
+const label = STATUS.find(s => s.k === k)?.l || k;
+save("jobs", d => { const x = d[id]; if (!x) return d; x.status = k; if (k === "applied" && !x.appliedAt) x.appliedAt = now(); x.timeline = touch(x, `Moved to ${label}`); return d; }, `${j.company}: ${label}`, `${j.company} moved to ${label}.`);
+}
+function setField(id, field, value){
+const j = S.data.jobs[id]; if (!j || (j[field] ?? "") === (value ?? "")) return;
+save("jobs", d => { if (d[id]) d[id][field] = value; return d; }, `${j.company}: update ${field}`, "Saved.");
+}
+function toggleSent(id, i){
+const j = S.data.jobs[id]; const c = j && contactsOf(j)[i]; if (!c) return;
+const sent = c.status === "sent";
+save("jobs", d => { const x = d[id]; const cc = x?.contacts?.[i]; if (!cc) return d; cc.status = sent ? "draft" : "sent"; cc.sentAt = sent ? null : now(); cc.followUpAt = sent ? null : addDays(now(), 7); x.timeline = touch(x, sent ? `Unmarked message to ${cc.name}` : `Sent message to ${cc.name}`); return d; },
+`${j.company}: ${sent ? "unmark" : "mark"} ${c.name} sent`, sent ? "Marked as not sent." : `Logged. Follow up with ${c.name.split(" ")[0]} ${fmtDate(addDays(now(),7))}.`);
+}
+function followedUp(id){
+const n = S.data.network[id]; if (!n) return;
+const count = (n.followUps || 0) + 1, next = addDays(now(), count <= 1 ? 7 : 14);
+save("network", d => { const x = d[id]; if (x) Object.assign(x, {lastTouchAt:now(), lastTouchBy:"me", status:"waiting", followUps:count, nextFollowUpAt:next}); return d; }, `Followed up with ${n.name}`, `Logged. Next check-in ${fmtDate(next)}.`);
+}
+function setNet(id, status){ const n = S.data.network[id]; if (!n) return; save("network", d => { if (d[id]) d[id].status = status; return d; }, `${n.name}: ${status}`, status === "scheduled" ? "Marked as meeting set." : "Updated."); }
+const slug = s => String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50) || "item";
+function addJob(form){
+const f = new FormData(form); const company = String(f.get("company")||"").trim(), role = String(f.get("role")||"").trim();
+if (!company || !role) return toast("Add a company and a role.");
+const url = safeUrl(String(f.get("url")||"").trim()); const m = url.match(/jobs\/view\/(\d+)/) || url.match(/currentJobId=(\d+)/);
+const id = `${slug(company)}-${m ? m[1] : Date.now().toString(36)}`; const applied = !!f.get("applied");
+save("jobs", d => { d[id] = {id, company, role, location:String(f.get("location")||"").trim(), workplace:"", salary:"", url, linkedinJobId:m?m[1]:null, reqId:null, source:"Added by you", newGrad:false, early:false, note:"", status: applied ? "applied" : "new", foundAt:now(), appliedAt: applied ? now() : null, approvedAt:null, applicationNumber:"", contacts:[], timeline:[{at:now(), text:"Added by you"}]}; return d; },
+`Add ${company} — ${role}`, `${company} added.`).then(ok => ok && closeDrawer());
+}
+function addContact(form){
+const f = new FormData(form); const name = String(f.get("name")||"").trim(); if (!name) return toast("Add a name.");
+const id = `${slug(name)}-${Date.now().toString(36)}`;
+save("network", d => { d[id] = {id, name, org:String(f.get("org")||"").trim(), context:String(f.get("context")||"").trim(), channel:String(f.get("channel")||"Email"), lastTouchAt:now(), lastTouchBy:"me", status:"waiting", followUps:0, nextFollowUpAt:addDays(now(),7), threadUrl:""}; return d; },
+`Add contact ${name}`, `${name} added. Follow-up set for ${fmtDate(addDays(now(),7))}.`).then(ok => { if (ok) { S.netForm = false; render(); } });
+}
+function saveProfile(){
+const v = id => ($(id)?.value || "").trim(); const p = v("p-portfolio");
+if (p && !safeUrl(p)) return toast("Portfolio link needs to start with https://");
+save("settings", s => { s.profile = {...(s.profile||{}), portfolioUrl:p, linkedinUrl:v("p-linkedin"), email:v("p-email"), pitch:v("p-pitch"), signature:v("p-sign")}; return s; }, "Update profile", "Saved. Drafts and templates use these details.");
+}
+function saveTemplate(){
+const t = currentTemplate(); const subject = $("t-subject")?.value ?? t.subject, body = $("t-body")?.value ?? t.body;
+save("settings", s => { s.templates ||= {}; s.templates[t.id] = {subject, body}; return s; }, `Edit template: ${t.name}`, "Template saved.").then(ok => { if (ok) { S.tpl.editing = false; render(); } });
+}
+function resetTemplate(){
+const t = currentTemplate();
+save("settings", s => { if (s.templates) delete s.templates[t.id]; return s; }, `Reset template: ${t.name}`, "Template reset to the original.").then(ok => { if (ok) { S.tpl.editing = false; render(); } });
+}
+async function copyText(text, btn, label){
+try { await navigator.clipboard.writeText(text); if (btn) { btn.textContent = "Copied"; setTimeout(() => { btn.textContent = label || "Copy"; }, 1500); } }
+catch { toast("Couldn't copy automatically. Select the text and copy it."); }
+}
+function metrics(){
+const all = jobs();
+const by = k => all.filter(j => j.status === k);
+const appliedAll = all.filter(j => j.appliedAt || ["applied","interviewing","offer"].includes(j.status));
+const convo = all.filter(j => ["interviewing","offer"].includes(j.status));
+const contacts = all.flatMap(j => contactsOf(j).map(c => ({...c, job:j})));
+const sent = contacts.filter(c => c.status === "sent");
+const today = sod(Date.now());
+const daily = (list, key, days = 14) => Array.from({length:days}, (_, i) => { const start = today - (days-1-i)*DAY; return list.filter(x => { const t = ts(x[key]); return t != null && t >= start && t < start + DAY; }).length; });
+return {
+all, by,
+open: by("new"), approved: by("approved"), appliedAll, convo, offers: by("offer"),
+contacts, sent, drafts: contacts.filter(c => c.status !== "sent"),
+newToday: all.filter(j => j.status === "new" && ts(j.foundAt) >= today).length,
+appliedWeek: appliedAll.filter(j => ts(j.appliedAt) >= today - 6*DAY).length,
+sparkFound: daily(all, "foundAt"), sparkApplied: daily(appliedAll, "appliedAt"), sparkSent: daily(sent, "sentAt"),
+sparkConvo: daily(all.filter(j => j.lastEmail?.at).map(j => ({at:j.lastEmail.at})), "at"),
+};
+}
+function weekly(weeks = 8){
+const all = jobs(); const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - ((d.getDay()+6) % 7));
+const mon = d.getTime();
+return Array.from({length:weeks}, (_, i) => {
+const start = mon - (weeks-1-i)*7*DAY, end = start + 7*DAY;
+const inW = s => { const t = ts(s); return t != null && t >= start && t < end; };
+return {
+label: new Date(start).toLocaleDateString(undefined,{month:"short",day:"numeric"}),
+found: all.filter(j => inW(j.foundAt)).length,
+applied: all.filter(j => inW(j.appliedAt)).length,
+outreach: all.reduce((a, j) => a + contactsOf(j).filter(c => inW(c.sentAt)).length, 0),
+};
+});
+}
+function spark(values, color){
+const w = 200, h = 36, max = Math.max(1, ...values), step = w / (values.length - 1);
+const pts = values.map((v, i) => [i*step, h - 3 - (v/max)*(h-8)]);
+const line = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join("");
+const area = `${line}L${w},${h}L0,${h}Z`;
+const last = pts[pts.length-1]; const id = "g" + hash(color + values.join(","));
+return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".28"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#${id})"/><path class="line" d="${line}" fill="none" stroke="${color}" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${color}"/></svg>`;
+}
+function activityChart(){
+const data = weekly(8);
+const W = 640, H = 220, padL = 28, padB = 26, padT = 10, plotW = W - padL, plotH = H - padB - padT;
+const max = Math.max(4, ...data.map(d => Math.max(d.found, d.applied + d.outreach)));
+const nice = Math.ceil(max / 4) * 4;
+const groupW = plotW / data.length, bw = Math.min(16, groupW * .26);
+const y = v => padT + plotH - (v / nice) * plotH;
+let grid = "", bars = "";
+for (let i = 0; i <= 4; i++) { const v = nice * i / 4, yy = y(v); grid += `<line x1="${padL}" x2="${W}" y1="${yy}" y2="${yy}" stroke="rgba(255,255,255,${i ? .06 : .14})"/><text x="${padL-8}" y="${yy+4}" text-anchor="end">${v}</text>`; }
+data.forEach((d, i) => {
+const cx = padL + groupW * i + groupW/2;
+const bar = (x, v, color, delay) => v ? `<rect class="bar-r" style="animation-delay:${delay}s" x="${x}" y="${y(v)}" width="${bw}" height="${Math.max(0, y(0)-y(v))}" rx="4" fill="${color}"><title>${v}</title></rect>` : "";
+bars += bar(cx - bw - 2, d.found, "rgba(206,203,247,.32)", .05*i);
+bars += bar(cx + 2, d.applied, "#8f81e5", .05*i + .1);
+if (d.outreach) bars += `<rect class="bar-r" style="animation-delay:${.05*i+.2}s" x="${cx+2}" y="${y(d.applied + d.outreach)}" width="${bw}" height="${Math.max(0, y(d.applied) - y(d.applied + d.outreach))}" rx="4" fill="#30d158"><title>${d.outreach} sent</title></rect>`;
+bars += `<text x="${cx}" y="${H-6}" text-anchor="middle">${esc(d.label)}</text>`;
+});
+return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Weekly activity for the last 8 weeks">${grid}${bars}</svg>`;
+}
+function donut(parts){
+const total = parts.reduce((a, p) => a + p.v, 0), r = 58, C = 2 * Math.PI * r; let off = 0;
+const segs = total ? parts.filter(p => p.v).map(p => { const len = (p.v / total) * C; const gap = parts.filter(x => x.v).length > 1 ? 3 : 0; const s = `<circle cx="75" cy="75" r="${r}" stroke="${p.c}" stroke-dasharray="${Math.max(0, len-gap)} ${C}" stroke-dashoffset="${-off}" stroke-linecap="butt"/>`; off += len; return s; }).join("") : `<circle cx="75" cy="75" r="${r}" stroke="rgba(255,255,255,.08)"/>`;
+return `<svg class="donut" viewBox="0 0 150 150" role="img" aria-label="Open roles by location"><circle cx="75" cy="75" r="${r}" stroke="rgba(255,255,255,.05)"/>${segs}<text x="75" y="74" text-anchor="middle" font-size="30" font-weight="700" letter-spacing="-1.5">${total}</text><text x="75" y="94" text-anchor="middle" font-size="11" fill="#6e6e73">open roles</text></svg>`;
+}
+function navHTML(){
+const m = S.connected ? metrics() : null;
+const badge = { discover: m?.open.length, outreach: m?.drafts.length, network: S.connected ? nets().filter(n => { const d = dayDiff(n.nextFollowUpAt); return d != null && d <= 0 && !["warm","scheduled"].includes(n.status); }).length : 0 };
+return `<button class="mark" type="button" data-tab="overview" aria-label="Overview">mi</button>` +
+(S.connected ? TABS.map(t => `<button class="tab" role="tab" type="button" data-tab="${t.k}" aria-selected="${S.tab === t.k}">${t.label}${badge[t.k] ? `<span class="badge">${badge[t.k]}</span>` : ""}</button>`).join("") + `<button class="cta" type="button" data-act="refresh">Refresh</button>` : `<span class="tab" style="padding:8px 14px;color:var(--text-2);font-size:14.5px">Job Search HQ</span>`);
+}
+function statusPill(){
+const a = app(); const fresh = a.lastRadarAt && Date.now() - ts(a.lastRadarAt) < 5*3600e3;
+return `<div class="status rise"><span class="live ${fresh ? "" : "warn"}"></span>${a.lastRadarAt ? `Scanned ${esc(rel(a.lastRadarAt))}` : "Waiting for the first scan"}<span class="sep">·</span><span class="dim">${esc(a.lastRadarNote || "LinkedIn and Gmail every 2 hours")}</span></div>`;
+}
+function summarySentence(m){
+const bits = [];
+if (m.appliedWeek) bits.push(`you've applied to <b>${plural(m.appliedWeek, "role")}</b> this week`);
+if (m.convo.length) bits.push(`<b>${m.convo.length}</b> ${m.convo.length === 1 ? "is" : "are"} in conversation`);
+if (m.offers.length) bits.push(`<b>${plural(m.offers.length, "offer")}</b> on the table`);
+const dueNet = nets().filter(n => { const d = dayDiff(n.nextFollowUpAt); return d != null && d <= 1 && !["warm","scheduled"].includes(n.status); });
+let s = bits.length ? bits.join(", ").replace(/, ([^,]*)$/, " and $1") + "." : "Nothing in motion yet. Approve a role to get started.";
+s = s.charAt(0).toUpperCase() + s.slice(1);
+if (dueNet.length) s += ` ${dueNet.slice(0,2).map(n => `<b>${esc(n.name.split(" ")[0])}</b>`).join(" and ")}${dueNet.length > 2 ? ` and ${dueNet.length-2} more` : ""} ${dueNet.length === 1 ? "is" : "are"} due for a follow-up.`;
+return s;
+}
+function needs(m){
+const items = [];
+if (!safeUrl(profile().portfolioUrl)) items.push({ic:"!", c:"ic-red", t:"Add your portfolio link", s:"Every draft and template uses it", go:"setup"});
+for (const j of jobs()) { const p = pending(j); if (j.outreach?.state === "ready" && p) items.push({ic:p, c:"ic-green", t:`Review ${plural(p,"draft")} for ${j.company}`, s:j.role, open:j.id, o:0}); }
+for (const j of jobs()) if (["queued","working"].includes(j.outreach?.state)) items.push({ic:"…", c:"ic-lav", t:`Finding people at ${j.company}`, s: j.outreach.state === "working" ? "Claude is researching the team" : "Starts within the hour", open:j.id, o:1});
+for (const j of jobs()) if (j.outreach?.state === "error") items.push({ic:"!", c:"ic-red", t:`Outreach stalled at ${j.company}`, s:j.outreach.note || "Retries on the next run", open:j.id, o:1});
+for (const n of nets()) { const d = dayDiff(n.nextFollowUpAt); if (d != null && d <= 1 && !["warm","scheduled"].includes(n.status)) items.push({ic:"↩", c: d < 0 ? "ic-red" : "ic-amber", t:`Follow up with ${n.name}`, s:`${due(n.nextFollowUpAt).t}${n.org ? " · " + n.org : ""}`, go:"network", o:2}); }
+for (const c of m.sent) { const d = dayDiff(c.followUpAt); if (d != null && d <= 0) items.push({ic:"↩", c:"ic-amber", t:`Nudge ${c.name}`, s:`${c.job.company} · sent ${fmtDate(c.sentAt)}`, open:c.job.id, o:2}); }
+for (const j of jobs()) { const d = dayDiff(j.nextStepAt); if (j.nextStep && d != null && d >= 0 && d <= 3) items.push({ic:"★", c:"ic-pink", t:`${j.nextStep}`, s:`${j.company} · ${due(j.nextStepAt).t}`, open:j.id, o:1}); }
+if (m.newToday) items.push({ic:m.newToday, c:"ic-lav", t:`${plural(m.newToday, "new role")} today`, s:"From your LinkedIn search", go:"discover", o:3});
+return items.sort((a, b) => (a.o ?? -1) - (b.o ?? -1));
+}
+function daysStrip(){
+const today = sod(Date.now()); const ev = [];
+for (const n of nets()) if (n.nextFollowUpAt && !["warm","scheduled"].includes(n.status)) ev.push({t:ts(n.nextFollowUpAt), label:n.name.split(" ")[0], k:"f", go:"network"});
+for (const j of jobs()) { for (const c of contactsOf(j)) if (c.status === "sent" && c.followUpAt) ev.push({t:ts(c.followUpAt), label:c.name.split(" ")[0], k:"f", open:j.id}); if (j.nextStepAt) ev.push({t:ts(j.nextStepAt), label:j.company, k:"s", open:j.id}); }
+const over = ev.filter(e => e.t != null && sod(e.t) < today);
+const cols = [{h:"Overdue", n:over.length, items:over, cls:over.length ? "over" : ""}];
+for (let i = 0; i < 7; i++) { const d = today + i*DAY; const items = ev.filter(e => e.t != null && sod(e.t) === d); const dt = new Date(d); cols.push({h: i === 0 ? "Today" : dt.toLocaleDateString(undefined,{weekday:"short"}), n: dt.getDate(), items, cls: i === 0 ? "today" : ""}); }
+return `<div class="days">${cols.map(c => `<div class="day ${c.cls}"><div class="day-h">${esc(c.h)}</div><div class="day-n num">${c.n}</div>${c.items.slice(0,3).map(e => `<button class="ev ${e.k}" type="button" ${e.open ? `data-open="${esc(e.open)}"` : `data-tab="${e.go}"`} title="${esc(e.label)}">${esc(e.label)}</button>`).join("")}${c.items.length > 3 ? `<span class="small">+${c.items.length-3}</span>` : ""}</div>`).join("")}</div>`;
+}
+function viewOverview(){
+const m = metrics(); const first = (profile().signature || "Matias").split(" ")[0];
+const kpi = (label, n, sub, sp, color, tab) => `<button class="card kpi rise" type="button" data-tab="${tab}"><span class="kpi-l">${label}</span><span class="kpi-n" data-count="${n}">${S.intro ? 0 : n}</span><span class="kpi-s">${sub}</span>${spark(sp, color)}</button>`;
+const reach = j => Math.max(RANK[j.status] ?? 0, j.appliedAt ? 2 : 0, j.approvedAt ? 1 : 0);
+const f = [
+{l:"Found", n:m.all.length, c:"#6e6e73"},
+{l:"Approved", n:m.all.filter(j => reach(j) >= 1).length, c:"#cecbf7"},
+{l:"Applied", n:m.all.filter(j => reach(j) >= 2).length, c:"#aea6f0"},
+{l:"Interviewing", n:m.all.filter(j => reach(j) >= 3).length, c:"#8f81e5"},
+{l:"Offer", n:m.offers.length, c:"#30d158"},
+];
+const fmax = Math.max(1, f[0].n);
+const funnel = f.map((s, i) => `<div class="f-row"><span class="f-label"><i style="background:${s.c}"></i>${s.l}</span><div style="min-width:0"><div class="f-track"><div class="f-fill" style="--w:${(s.n/fmax*100).toFixed(1)}%;background:${s.c}"></div></div>${i < f.length-1 && f[i].n ? `<div class="f-conv">${Math.round((f[i+1].n / f[i].n) * 100)}% move to ${f[i+1].l.toLowerCase()}</div>` : ""}</div><span class="f-n">${s.n}</span></div>`).join("");
+const open = m.open;
+const loc = [{l:"New York area", v:open.filter(isNYC).length, c:"#cecbf7"}, {l:"Remote", v:open.filter(j => !isNYC(j) && isRemote(j)).length, c:"#8f81e5"}, {l:"Elsewhere", v:open.filter(j => !isNYC(j) && !isRemote(j)).length, c:"#48484a"}];
+const ng = open.filter(j => j.newGrad).length, early = open.filter(j => j.early).length;
+const list = needs(m);
+const draftsReady = m.drafts.length;
+const head2 = `${open.length} ${open.length === 1 ? "role" : "roles"} to review.`;
+const head3 = draftsReady ? `${plural(draftsReady, "draft")} ready.` : m.convo.length ? `${m.convo.length} in conversation.` : "Let's get you in the room.";
+return `
+<section class="view">
+${statusPill()}
+<p class="eyebrow rise">${esc(greeting())}, ${esc(first)}</p>
+<h1 class="display rise">${esc(head2)}<br><span class="grad">${esc(head3)}</span></h1>
+<p class="lede rise">${summarySentence(m)}</p>
+<div class="kpis">
+${kpi("Roles to review", open.length, m.newToday ? `<span class="up">+${m.newToday}</span> today` : "From LinkedIn", m.sparkFound, "#cecbf7", "discover")}
+${kpi("Applications", m.appliedAll.length, m.appliedWeek ? `<span class="up">+${m.appliedWeek}</span> this week` : "None this week yet", m.sparkApplied, "#aea6f0", "pipeline")}
+${kpi("In conversation", m.convo.length, m.offers.length ? `${plural(m.offers.length, "offer")} on the table` : "Interviews and talks", m.sparkConvo, "#8f81e5", "pipeline")}
+${kpi("Outreach", m.contacts.length, m.contacts.length ? `${m.sent.length} sent · ${m.drafts.length} to review` : "Approve a role to start", m.sparkSent, "#30d158", "outreach")}
+</div>
+</section>
+<section class="section">
+<div class="grid-2">
+<div class="card rise"><div class="card-h"><h2 class="h3">Pipeline</h2><span class="small">Every role you've tracked</span></div><div class="funnel">${funnel}</div></div>
+<div class="card rise"><div class="card-h"><h2 class="h3">Needs you</h2><span class="small">${list.length ? plural(list.length, "item") : ""}</span></div>
+${list.length ? `<ul class="needs">${list.slice(0,6).map(it => `<li><button class="need" type="button" ${it.open ? `data-open="${esc(it.open)}"` : `data-tab="${it.go}"`}><span class="need-ic ${it.c}">${esc(it.ic)}</span><span class="need-t"><b>${esc(it.t)}</b><span>${esc(it.s)}</span></span><span class="arrow">→</span></button></li>`).join("")}</ul>` : `<p class="small" style="margin:0">You're all caught up.</p>`}
+</div>
+</div>
+</section>
+<section class="section">
+<div class="grid-2">
+<div class="card rise"><div class="card-h"><h2 class="h3">Activity</h2><div class="legend"><span><i style="background:rgba(206,203,247,.4)"></i>Roles found</span><span><i style="background:#8f81e5"></i>Applied</span><span><i style="background:#30d158"></i>Outreach sent</span></div></div>${activityChart()}</div>
+<div class="card rise"><div class="card-h"><h2 class="h3">Open roles</h2><span class="small">${ng} new grad · ${early} early applicant</span></div>
+<div class="donut-wrap">${donut(loc.map(l => ({v:l.v, c:l.c})))}<div class="dl">${loc.map(l => `<div><i style="background:${l.c}"></i>${l.l}<b>${l.v}</b></div>`).join("")}<div><i style="background:var(--green)"></i>New grad<b>${ng}</b></div></div></div>
+</div>
+</div>
+</section>
+<section class="section">
+<div class="card rise"><div class="card-h"><h2 class="h3">Next 7 days</h2><span class="small"><span style="color:var(--amber)">■</span> follow-ups &nbsp; <span style="color:var(--lav-1)">■</span> next steps</span></div>${daysStrip()}</div>
+</section>`;
+}
+function jobCard(j){
+const url = safeUrl(j.url);
+const posted = j.postedAt ? `Posted ${rel(j.postedAt)}` : (j.postedLabel || "");
+const tags = [j.newGrad && `<span class="tag tag-green">New grad</span>`, j.early && `<span class="tag tag-lav">Early applicant</span>`, j.salary && `<span class="tag">${esc(j.salary)}</span>`, posted && `<span class="tag">${esc(posted)}</span>`].filter(Boolean).join("");
+const actions = j.status === "passed" ? `<button class="btn btn-sm" type="button" data-act="restore" data-id="${esc(j.id)}">Restore</button>` : `<button class="btn btn-approve" type="button" data-act="approve" data-id="${esc(j.id)}">Approve</button><button class="btn btn-ghost" type="button" data-act="pass" data-id="${esc(j.id)}">Pass</button>`;
+return `<article class="job rise" data-open="${esc(j.id)}" tabindex="0" aria-label="${esc(j.company)} — ${esc(j.role)}">
+<div class="job-top">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h3>${esc(j.role)}</h3></div></div>
+<div class="meta">${esc([j.location, j.workplace].filter(Boolean).join(" · "))}</div>
+${tags ? `<div class="tags">${tags}</div>` : ""}
+${j.note ? `<p class="note">${esc(j.note)}</p>` : ""}
+<div class="job-actions">${actions}<span class="grow"></span>${url ? `<a class="btn btn-sm btn-ghost" href="${esc(url)}" target="_blank" rel="noopener">Posting ↗</a>` : ""}</div>
+</article>`;
+}
+function viewDiscover(){
+const all = jobs(); const leads = all.filter(j => j.status === "new"), passed = all.filter(j => j.status === "passed");
+const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
+let list = S.filter === "passed" ? passed : leads;
+if (S.filter === "newgrad") list = list.filter(j => j.newGrad);
+if (S.filter === "nyc") list = list.filter(isNYC);
+if (S.filter === "remote") list = list.filter(isRemote);
+if (S.filter === "early") list = list.filter(j => j.early);
+const q = S.q.trim().toLowerCase(); if (q) list = list.filter(j => `${j.company} ${j.role} ${j.location} ${j.note}`.toLowerCase().includes(q));
+list.sort((a, b) => (Number(!!b.newGrad) - Number(!!a.newGrad)) || ((ts(b.postedAt) ?? ts(b.foundAt) ?? 0) - (ts(a.postedAt) ?? ts(a.foundAt) ?? 0)));
+const head = `<div class="section-head"><div><p class="eyebrow rise">Discover</p><h1 class="h2 rise">${leads.length} ${leads.length === 1 ? "role" : "roles"}. <span class="dim">Approve the ones worth your time.</span></h1></div><button class="btn" type="button" data-act="newjob">Add a role</button></div>`;
+const bar = `<div class="toolbar"><label class="search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.3" stroke="#6e6e73" stroke-width="1.7"/><path d="M11 11l3.6 3.6" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Search company, role or note" value="${esc(S.q)}" aria-label="Search roles"></label><div class="chips">${chips.map(c => `<button class="chip" type="button" data-filter="${c.k}" aria-pressed="${S.filter === c.k}">${c.l}<span class="n">${c.n}</span></button>`).join("")}</div></div>`;
+if (!list.length) return `<section class="view">${head}${bar}<div class="empty"><h3>${leads.length || passed.length ? "Nothing in this filter" : "No roles yet"}</h3><p>${leads.length || passed.length ? "Try another filter or clear the search." : "New-grad UI/UX roles from LinkedIn land here every two hours."}</p></div></section>`;
+return `<section class="view">${head}${bar}<div class="jobs">${list.map(jobCard).join("")}</div></section>`;
+}
+function outreachTag(j){
+const o = j.outreach || {}, n = contactsOf(j).length, p = pending(j);
+if (o.state === "queued") return `<span class="tag tag-lav">Outreach queued</span>`;
+if (o.state === "working") return `<span class="tag tag-lav">Finding people…</span>`;
+if (o.state === "error") return `<span class="tag tag-red">Outreach stalled</span>`;
+if (n) return p ? `<span class="tag tag-green">${plural(p,"draft")} to review</span>` : `<span class="tag">${n} contacted</span>`;
+return "";
+}
+function pc(j){
+const sent = contactsOf(j).filter(c => c.status === "sent").length, n = contactsOf(j).length;
+const sub = [j.applicationNumber && `App # ${esc(j.applicationNumber)}`, j.appliedAt && `Applied ${fmtDate(j.appliedAt)}`].filter(Boolean).join(" · ");
+return `<button class="pc" type="button" data-open="${esc(j.id)}"><span class="co" style="font-size:13px">${esc(j.company)}</span><h4>${esc(j.role)}</h4>${sub ? `<span class="sm">${sub}</span>` : ""}${outreachTag(j)}${n ? `<div class="progress" title="${sent} of ${n} contacted"><span style="width:${(sent/n*100).toFixed(0)}%"></span></div>` : ""}${j.lastEmail?.subject ? `<span class="sm">✉ ${esc(j.lastEmail.subject)} · ${esc(rel(j.lastEmail.at))}</span>` : ""}${j.nextStep ? `<span class="sm">Next: ${esc(j.nextStep)}${j.nextStepAt ? ` · ${esc(fmtDate(j.nextStepAt))}` : ""}</span>` : ""}</button>`;
+}
+function viewPipeline(){
+const all = jobs(); const active = all.filter(j => ["approved","applied","interviewing","offer"].includes(j.status));
+const cols = STAGES.slice(1).map(s => { const list = all.filter(j => j.status === s.k).sort((a,b) => (ts(b.appliedAt||b.approvedAt)??0) - (ts(a.appliedAt||a.approvedAt)??0)); return `<div class="col rise"><div class="col-h"><i style="background:${s.color}"></i>${s.label}<span class="n">${list.length}</span></div>${list.length ? list.map(pc).join("") : `<div class="col-empty">${s.k === "approved" ? "Approve a role in Discover." : "Nothing here yet."}</div>`}</div>`; }).join("");
+const closed = all.filter(j => j.status === "closed");
+return `<section class="view"><div class="section-head"><div><p class="eyebrow rise">Pipeline</p><h1 class="h2 rise">${active.length} active. <span class="dim">From approved to offer.</span></h1></div></div><div class="board">${cols}</div>${closed.length ? `<details style="margin-top:22px"><summary class="small" style="cursor:pointer;font-weight:600;font-size:14px">Closed (${closed.length})</summary><div class="jobs" style="margin-top:14px">${closed.map(pc).join("")}</div></details>` : ""}</section>`;
+}
+function contactHTML(j, c, i){
+const sent = c.status === "sent", li = safeUrl(c.linkedinUrl), gd = safeUrl(c.gmailDraftUrl), fu = sent && c.followUpAt ? due(c.followUpAt) : null;
+return `<div class="contact"><div class="av" aria-hidden="true">${esc(initials(c.name))}</div><div class="c-body">
+<div class="c-name">${esc(c.name)}<span>${esc(c.title || "")}</span></div>
+${c.why ? `<div class="c-why">${esc(c.why)}</div>` : ""}
+${c.message ? `<details class="msg"><summary>${c.channel === "email" ? `Email${c.email ? " · " + esc(c.email) : ""}` : "LinkedIn message"}${c.subject ? ` — ${esc(c.subject)}` : ""}</summary><pre>${esc(c.message)}</pre></details>` : ""}
+<div class="acts" style="justify-content:flex-start">${c.message ? `<button class="btn btn-sm" type="button" data-act="copy" data-id="${esc(j.id)}" data-i="${i}">Copy</button>` : ""}${gd ? `<a class="btn btn-sm" href="${esc(gd)}" target="_blank" rel="noopener">Gmail draft ↗</a>` : ""}${li ? `<a class="btn btn-sm" href="${esc(li)}" target="_blank" rel="noopener">Profile ↗</a>` : ""}<button class="btn btn-sm ${sent ? "on" : ""}" type="button" data-act="sent" data-id="${esc(j.id)}" data-i="${i}">${sent ? "Sent ✓" : "Mark sent"}</button>${fu ? `<span class="due ${fu.c}" style="align-self:center">Follow up ${esc(fu.t.toLowerCase())}</span>` : ""}</div>
+</div></div>`;
+}
+function viewOutreach(){
+const list = jobs().filter(j => contactsOf(j).length || ["queued","working","error"].includes(j.outreach?.state)).sort((a,b) => (pending(b) - pending(a)) || ((ts(b.approvedAt)??0) - (ts(a.approvedAt)??0)));
+const m = metrics();
+const head = `<div class="section-head"><div><p class="eyebrow rise">Outreach</p><h1 class="h2 rise">${m.drafts.length} to review. <span class="dim">${m.sent.length} sent.</span></h1></div><button class="btn" type="button" data-tab="templates">Message templates</button></div>`;
+if (!list.length) return `<section class="view">${head}<div class="empty"><h3>No outreach yet</h3><p>Approve a role and Claude finds about five people for it: the recruiter, the likely hiring manager, designers on the team and an alum when there is one. It writes a draft for each. You review and send.</p></div></section>`;
+return `<section class="view">${head}${list.map(j => { const o = j.outreach || {};
+const st = ["queued","working"].includes(o.state) ? `<div class="stateline"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team" : "Queued, starts within the hour"}${o.updatedAt ? ` · ${esc(rel(o.updatedAt))}` : ""}</div>` : o.state === "error" ? `<div class="stateline" style="color:var(--red)">${esc(o.note || "Outreach stalled. It retries on the next run.")}</div>` : "";
+return `<div class="list ob rise"><div class="ob-h" data-open="${esc(j.id)}">${logo(j.company)}<div style="flex:1;min-width:0"><div class="co" style="font-size:13px">${esc(j.company)}${j.reqId || j.linkedinJobId ? ` · Job ${esc(j.reqId || j.linkedinJobId)}` : ""}</div><div style="font-weight:600">${esc(j.role)}</div></div>${outreachTag(j)}</div>${st}${contactsOf(j).map((c,i) => contactHTML(j,c,i)).join("")}</div>`; }).join("")}</section>`;
+}
+function viewNetwork(){
+const list = nets().sort((a,b) => (ts(a.nextFollowUpAt) ?? 9e15) - (ts(b.nextFollowUpAt) ?? 9e15));
+const dueN = list.filter(n => { const d = dayDiff(n.nextFollowUpAt); return d != null && d <= 0 && !["warm","scheduled"].includes(n.status); }).length;
+const form = S.netForm ? `<form class="card rise" id="net-form" style="margin-bottom:16px"><div class="form-grid"><div class="field"><label for="n-name">Name</label><input class="input" id="n-name" name="name" required></div><div class="field"><label for="n-org">Company</label><input class="input" id="n-org" name="org"></div><div class="field wide"><label for="n-context">Context</label><input class="input" id="n-context" name="context" placeholder="How you know them and what you asked"></div><div class="field"><label for="n-channel">Channel</label><input class="input" id="n-channel" name="channel" value="Email"></div><div class="field" style="justify-content:flex-end"><div class="acts"><button class="btn btn-ghost" type="button" data-act="netform">Cancel</button><button class="btn btn-white" type="submit">Add contact</button></div></div></div><p class="hint" style="margin:12px 0 0">First follow-up is one week out, then every two weeks.</p></form>` : "";
+const head = `<div class="section-head"><div><p class="eyebrow rise">Network</p><h1 class="h2 rise">${list.length} people. <span class="dim">${dueN ? `${dueN} due for a follow-up.` : "Nobody overdue."}</span></h1></div><button class="btn" type="button" data-act="netform">${S.netForm ? "Close" : "Add contact"}</button></div>`;
+if (!list.length) return `<section class="view">${head}${form}<div class="empty"><h3>No contacts yet</h3><p>Networking threads from Gmail appear here with follow-up dates.</p></div></section>`;
+return `<section class="view">${head}${form}<div class="list rise">${list.map(n => { const st = NET[n.status] || NET.waiting; const d = ["warm","scheduled"].includes(n.status) ? null : due(n.nextFollowUpAt); const th = safeUrl(n.threadUrl); const lt = n.lastTouchAt ? `${n.lastTouchBy === "them" ? "They wrote" : "You wrote"} ${rel(n.lastTouchAt)}` : "";
+return `<div class="row"><div class="av" aria-hidden="true">${esc(initials(n.name))}</div><div class="row-main"><div class="row-t">${esc(n.name)}${n.org ? `<small>${esc(n.org)}</small>` : ""}<span class="tag ${st[1]}">${st[0]}</span></div>${n.context ? `<div class="row-s">${esc(n.context)}</div>` : ""}${lt || n.channel ? `<div class="row-s" style="color:var(--text-3)">${esc([lt, n.channel].filter(Boolean).join(" · "))}</div>` : ""}</div><div class="row-side">${d ? `<span class="due ${d.c}">${esc(d.t)}</span>` : ""}<div class="acts">${th ? `<a class="btn btn-sm" href="${esc(th)}" target="_blank" rel="noopener">Thread ↗</a>` : ""}<button class="btn btn-sm" type="button" data-act="tpl-for" data-name="${esc(n.name)}" data-tpl="${n.status === "warm" ? "catchup" : "fu-1"}">Template</button>${["warm","scheduled"].includes(n.status) ? "" : `<button class="btn btn-sm" type="button" data-act="followed" data-id="${esc(n.id)}">Followed up</button>`}${n.status !== "scheduled" ? `<button class="btn btn-sm btn-ghost" type="button" data-act="scheduled" data-id="${esc(n.id)}">Meeting set</button>` : ""}</div></div></div>`; }).join("")}</div></section>`;
+}
+function currentTemplate(){ const base = TEMPLATES.find(t => t.id === S.tpl.id) || TEMPLATES[0]; const o = (S.data.settings.templates || {})[base.id]; return o ? {...base, subject: o.subject ?? base.subject, body: o.body ?? base.body, custom:true} : base; }
+function tplVars(){
+const j = S.data.jobs[S.tpl.job] || {}; const p = profile();
+return {
+first_name: S.tpl.first.trim().split(" ")[0] || "", company: j.company || "", role: j.role || "",
+job_number: j.reqId || j.applicationNumber || j.linkedinJobId || "", portfolio: safeUrl(p.portfolioUrl) || "", linkedin: p.linkedinUrl || "",
+school: S.tpl.school || "", context: S.tpl.context.trim(),
+};
+}
+function fillTemplate(text, vars, html){
+return String(text || "").replace(/\{(\w+)\}/g, (m, k) => {
+const v = vars[k];
+if (!html) return v || (k === "context" ? "" : `[${k.replace(/_/g," ")}]`);
+return v ? `<span class="var">${esc(v)}</span>` : (k === "context" ? `<span class="var miss">[add context]</span>` : `<span class="var miss">[${esc(k.replace(/_/g," "))}]</span>`);
+}).replace(html ? /$^/ : /\n{3,}/g, "\n\n");
+}
+function viewTemplates(){
+const t = currentTemplate(), vars = tplVars();
+const groups = [...new Set(TEMPLATES.map(x => x.group))];
+const jobOpts = jobs().filter(j => j.status !== "passed").sort((a,b) => (RANK[b.status]??0) - (RANK[a.status]??0) || a.company.localeCompare(b.company));
+const plainBody = fillTemplate(t.body, vars, false).replace(/\n{3,}/g, "\n\n").trim();
+const len = plainBody.length;
+const editor = S.tpl.editing ? `<div class="card" style="margin-top:16px"><div class="card-h"><h3 class="h3" style="font-size:16px">Edit template</h3><span class="small">Use {first_name}, {company}, {role}, {job_number}, {portfolio}, {linkedin}, {school}, {context}</span></div>${t.subject !== undefined ? `<div class="field" style="margin-bottom:12px"><label for="t-subject">Subject</label><input class="input" id="t-subject" value="${esc(t.subject || "")}"></div>` : ""}<div class="field"><label for="t-body">Message</label><textarea class="textarea" id="t-body" style="min-height:260px">${esc(t.body)}</textarea></div><div class="acts" style="margin-top:14px">${t.custom ? `<button class="btn btn-ghost" type="button" data-act="tpl-reset">Reset to original</button>` : ""}<button class="btn btn-ghost" type="button" data-act="tpl-edit">Cancel</button><button class="btn btn-white" type="button" data-act="tpl-save">Save template</button></div></div>` : "";
+return `<section class="view"><div class="section-head"><div><p class="eyebrow rise">Templates</p><h1 class="h2 rise">The right message. <span class="dim">Filled in for you.</span></h1></div></div>
+<div class="tpl">
+<div class="tpl-list rise">${groups.map(g => `<div class="tpl-group">${esc(g)}</div>${TEMPLATES.filter(x => x.group === g).map(x => `<button class="tpl-item" type="button" data-tpl="${x.id}" aria-pressed="${x.id === t.id}"><b>${esc(x.name)}</b><span>${esc(x.channel)}${x.limit ? ` · ${x.limit} chars` : ""}</span></button>`).join("")}`).join("")}</div>
+<div class="rise" style="min-width:0">
+<div class="card">
+<div class="card-h"><div><h2 class="h3">${esc(t.name)}</h2><p class="small" style="margin:4px 0 0">${esc(t.when)}</p></div><span class="tag ${t.channel === "Email" ? "tag-lav" : "tag-green"}">${esc(t.channel)}</span></div>
+<div class="fill">
+<div class="field"><label for="t-job">Role</label><select class="select" id="t-job"><option value="">Choose a role…</option>${jobOpts.map(j => `<option value="${esc(j.id)}" ${j.id === S.tpl.job ? "selected" : ""}>${esc(j.company)} — ${esc(j.role)}</option>`).join("")}</select></div>
+<div class="field"><label for="t-first">Their name</label><input class="input" id="t-first" value="${esc(S.tpl.first)}" placeholder="e.g. Emily Gary"></div>
+${/\{school\}/.test(t.body) ? `<div class="field"><label for="t-school">Shared school</label><select class="select" id="t-school">${["Syracuse","Parsons","Stanford"].map(s => `<option ${s === S.tpl.school ? "selected" : ""}>${s}</option>`).join("")}</select></div>` : ""}
+${/\{context\}/.test(t.body) ? `<div class="field wide"><label for="t-context">Context</label><textarea class="textarea" id="t-context" style="min-height:70px" placeholder="${esc(t.contextHint || "A line that makes this personal")}">${esc(S.tpl.context)}</textarea></div>` : ""}
+</div>
+<div class="preview">${t.subject ? `<div class="subj">Subject: <b>${fillTemplate(t.subject, vars, true)}</b></div>` : ""}<pre>${fillTemplate(t.body, vars, true)}</pre></div>
+<div class="acts" style="justify-content:space-between;margin-top:14px;align-items:center"><span class="counter ${t.limit && len > t.limit ? "over" : ""}">${len}${t.limit ? ` / ${t.limit}` : ""} characters</span><div class="acts"><button class="btn btn-ghost" type="button" data-act="tpl-edit">${S.tpl.editing ? "Close editor" : "Edit template"}</button>${t.subject ? `<button class="btn" type="button" data-act="tpl-copy-subj">Copy subject</button>` : ""}<button class="btn btn-white" type="button" data-act="tpl-copy">Copy message</button></div></div>
+</div>
+${editor}
+</div>
+</div></section>`;
+}
+function viewSetup(){
+const p = profile(), a = app(); const log = [...(a.log || [])].reverse().slice(0, 30);
+return `<section class="view"><div class="section-head"><div><p class="eyebrow rise">Settings</p><h1 class="h2 rise">Your details. <span class="dim">Your automation.</span></h1></div></div>
+<div class="grid-2">
+<div class="card rise"><div class="card-h"><h2 class="h3">Details used in drafts</h2></div><div class="form-grid">
+<div class="field wide"><label for="p-portfolio">Portfolio</label><input class="input" id="p-portfolio" type="url" value="${esc(p.portfolioUrl || "")}" placeholder="https://"></div>
+<div class="field"><label for="p-linkedin">LinkedIn</label><input class="input" id="p-linkedin" value="${esc(p.linkedinUrl || "")}"></div>
+<div class="field"><label for="p-email">Email</label><input class="input" id="p-email" type="email" value="${esc(p.email || "")}"></div>
+<div class="field wide"><label for="p-pitch">One-line intro</label><textarea class="textarea" id="p-pitch" style="min-height:76px">${esc(p.pitch || "")}</textarea></div>
+<div class="field wide"><label for="p-sign">Sign-off name</label><input class="input" id="p-sign" value="${esc(p.signature || "")}"></div>
+</div><div class="acts" style="margin-top:16px"><button class="btn btn-white" type="button" data-act="save-profile">Save</button></div></div>
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<div class="card rise"><div class="card-h"><h2 class="h3">Automation</h2><span class="tag tag-green">Running</span></div><dl class="kv">
+<dt>Scan</dt><dd>LinkedIn and Gmail every 2 hours, 8 AM to 10 PM</dd>
+<dt>Outreach</dt><dd>Approved roles get about 5 people and drafts, every hour</dd>
+<dt>Last scan</dt><dd>${a.lastRadarAt ? `${esc(fmtDate(a.lastRadarAt))}, ${esc(fmtTime(a.lastRadarAt))}` : "Not yet"}${a.lastRadarNote ? ` · ${esc(a.lastRadarNote)}` : ""}</dd>
+<dt>Sources</dt><dd>LinkedIn ${a.connections?.linkedin ? "✓" : "—"} · Gmail ${a.connections?.gmail ? "✓" : "—"} · Outlook ${a.connections?.outlook ? "✓" : "not linked"}</dd>
+<dt>Sending</dt><dd>Never automatic. Drafts wait for you.</dd>
+</dl></div>
+<div class="card rise"><div class="card-h"><h2 class="h3">Connection</h2></div><dl class="kv"><dt>Data</dt><dd class="mono-text" style="font-family:var(--mono);font-size:13px">${esc(S.cfg.repo)}</dd><dt>Token</dt><dd>Saved on this device only</dd><dt>Synced</dt><dd>${esc(rel(S.lastSync))}</dd></dl><div class="acts" style="margin-top:16px;justify-content:flex-start"><button class="btn btn-sm" type="button" data-act="refresh">Sync now</button><button class="btn btn-sm btn-ghost" type="button" data-act="disconnect">Disconnect this device</button></div></div>
+</div>
+</div>
+<div class="card rise" style="margin-top:16px"><div class="card-h"><h2 class="h3">Activity</h2><span class="small">What the background jobs did</span></div>${log.length ? `<ul class="timeline">${log.map(e => `<li><span></span><time>${esc(fmtDate(e.at))}</time><span>${esc(e.text)}</span></li>`).join("")}</ul>` : `<p class="small" style="margin:0">Scans and outreach runs will show up here.</p>`}</div>
+</section>`;
+}
+function viewLock(){
+const tokenUrl = "https://github.com/settings/personal-access-tokens/new?name=Job%20Search%20HQ&description=Read%20and%20write%20job-search-hq-data&target_name=Indo1919&expires_in=366&contents=write";
+return `<div class="lock"><div class="lock-in">
+<p class="eyebrow rise">Job Search HQ</p>
+<h1 class="display rise">Your search.<br><span class="grad">Running itself.</span></h1>
+<p class="lede rise" style="margin-inline:auto">Private to you. Connect this device to your data once and it stays connected.</p>
+<form class="card rise" id="lock-form">
+<ol><li><a href="${tokenUrl}" target="_blank" rel="noopener">Create a fine-grained GitHub token ↗</a></li><li>Repository access: only <b style="color:var(--text)">job-search-hq-data</b>. Permissions: <b style="color:var(--text)">Contents → Read and write</b>.</li><li>Paste it below.</li></ol>
+<div class="field" style="margin-bottom:12px"><label for="l-repo">Data repository</label><input class="input" id="l-repo" name="repo" value="${esc(S.cfg.repo || DEFAULT_REPO)}" autocomplete="off" spellcheck="false"></div>
+<div class="field"><label for="l-token">Access token</label><input class="input" id="l-token" name="token" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></div>
+${S.error ? `<div class="err" role="alert">${esc(S.error)}</div>` : ""}
+<div class="acts" style="margin-top:18px;justify-content:space-between;align-items:center"><span class="hint">The token stays in this browser and only talks to GitHub.</span><button class="btn btn-white" type="submit">Connect</button></div>
+</form>
+</div></div>`;
+}
+function drawerJob(j){
+const url = safeUrl(j.url), o = j.outreach || {}, tl = [...(j.timeline || [])].reverse();
+const people = contactsOf(j).length ? `<div class="list" style="margin:0 -2px">${contactsOf(j).map((c,i) => contactHTML(j,c,i)).join("")}</div>`
+: ["queued","working"].includes(o.state) ? `<div class="stateline" style="padding:4px 0"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team now." : "Queued. Claude starts within the hour."}</div>`
+: ["new","passed"].includes(j.status) ? `<p class="small" style="margin:0 0 14px">Approve this role and Claude finds about 5 people to message, with a draft for each.</p><button class="btn btn-approve" type="button" data-act="approve" data-id="${esc(j.id)}">Approve</button>`
+: `<p class="small" style="margin:0 0 14px">No outreach for this role yet.</p><button class="btn btn-sm" type="button" data-act="rerun" data-id="${esc(j.id)}">Find people</button>`;
+return `<div class="d-hero">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h2>${esc(j.role)}</h2><div class="meta">${esc([j.location, j.workplace, j.salary].filter(Boolean).join(" · "))}</div></div></div>
+<div class="steps" role="group" aria-label="Status">${STATUS.map(s => `<button type="button" data-act="status" data-id="${esc(j.id)}" data-k="${s.k}" aria-pressed="${j.status === s.k}">${s.l}</button>`).join("")}</div>
+${j.note ? `<div class="card" style="padding:18px"><p style="margin:0;font-size:15px;color:var(--text-2)">${esc(j.note)}</p></div>` : ""}
+<div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:14px">Tracking</h3><div class="form-grid">
+<div class="field"><label for="d-app">Application number</label><input class="input" id="d-app" data-field="applicationNumber" data-id="${esc(j.id)}" value="${esc(j.applicationNumber || "")}" placeholder="Filled in from your email" style="font-family:var(--mono);font-size:14px"></div>
+<div class="field"><label>Job number</label><div class="input" style="font-family:var(--mono);font-size:14px;color:var(--text-2)">${esc(j.reqId || j.linkedinJobId || "—")}</div></div>
+<div class="field"><label for="d-next">Next step</label><input class="input" id="d-next" data-field="nextStep" data-id="${esc(j.id)}" value="${esc(j.nextStep || "")}" placeholder="e.g. Portfolio review"></div>
+<div class="field"><label for="d-nextat">Date</label><input class="input" id="d-nextat" type="date" data-field="nextStepAt" data-kind="date" data-id="${esc(j.id)}" value="${esc(toDateInput(j.nextStepAt))}"></div>
+<div class="field wide"><label for="d-notes">Notes</label><textarea class="textarea" id="d-notes" data-field="notes" data-id="${esc(j.id)}" placeholder="Anything worth remembering">${esc(j.notes || "")}</textarea></div>
+</div><dl class="kv" style="margin-top:16px">${j.appliedAt ? `<dt>Applied</dt><dd>${esc(fmtDate(j.appliedAt))}</dd>` : ""}${j.postedAt ? `<dt>Posted</dt><dd>${esc(fmtDate(j.postedAt))}</dd>` : ""}<dt>Source</dt><dd>${esc(j.source || "LinkedIn")}</dd>${url ? `<dt>Posting</dt><dd><a href="${esc(url)}" target="_blank" rel="noopener">Open on LinkedIn ↗</a></dd>` : ""}</dl></div>
+${j.lastEmail?.subject ? `<div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:8px">Latest email</h3><div style="font-weight:600">${esc(j.lastEmail.subject)}</div><div class="small">${esc(j.lastEmail.from || "")} · ${esc(rel(j.lastEmail.at))}</div>${j.lastEmail.snippet ? `<p style="margin:10px 0 0;color:var(--text-2);font-size:14.5px">${esc(j.lastEmail.snippet)}</p>` : ""}${safeUrl(j.lastEmail.url) ? `<p style="margin:10px 0 0"><a href="${esc(safeUrl(j.lastEmail.url))}" target="_blank" rel="noopener">Open in Gmail ↗</a></p>` : ""}</div>` : ""}
+<div class="card" style="padding:18px"><div class="card-h" style="margin-bottom:10px"><h3 class="h3" style="font-size:16px">People to message</h3>${contactsOf(j).length ? `<button class="btn btn-sm btn-ghost" type="button" data-act="tpl-job" data-id="${esc(j.id)}">Templates</button>` : ""}</div>${people}</div>
+${tl.length ? `<div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:10px">History</h3><ul class="timeline">${tl.map(e => `<li><span></span><time>${esc(fmtDate(e.at))}</time><span>${esc(e.text)}</span></li>`).join("")}</ul></div>` : ""}`;
+}
+function drawerNewJob(){
+return `<div><p class="eyebrow">Add a role</p><h2 class="h2" style="font-size:32px">Track something <span class="dim">you found.</span></h2></div><form class="card" id="job-form" style="padding:18px"><div class="form-grid"><div class="field"><label for="j-company">Company</label><input class="input" id="j-company" name="company" required></div><div class="field"><label for="j-role">Role</label><input class="input" id="j-role" name="role" required></div><div class="field wide"><label for="j-url">Posting link</label><input class="input" id="j-url" name="url" type="url" placeholder="https://www.linkedin.com/jobs/view/…"></div><div class="field"><label for="j-loc">Location</label><input class="input" id="j-loc" name="location" placeholder="New York, NY"></div><div class="field" style="justify-content:flex-end"><label style="display:flex;gap:9px;align-items:center;color:var(--text);font-weight:500;font-size:14.5px"><input type="checkbox" name="applied"> I already applied</label></div></div><div class="acts" style="margin-top:16px"><button class="btn btn-white" type="submit">Add role</button></div></form>`;
+}
+function renderDrawer(){
+const wrap = $("drawer");
+if (!S.drawer) { wrap.hidden = true; return; }
+const body = $("drawer-body");
+const ae = document.activeElement;
+if (body.contains(ae) && /INPUT|TEXTAREA|SELECT/.test(ae.tagName)) return;
+if (S.drawer.type === "job") {
+const j = S.data.jobs[S.drawer.id]; if (!j) { closeDrawer(); return; }
+$("drawer-title").textContent = j.company;
+const open = [...body.querySelectorAll("details")].map((d,i) => d.open ? i : -1).filter(i => i >= 0);
+const scroll = body.scrollTop;
+body.innerHTML = drawerJob(j);
+if (S.drawer.last === j.id) { const ds = body.querySelectorAll("details"); open.forEach(i => ds[i] && (ds[i].open = true)); body.scrollTop = scroll; }
+S.drawer.last = j.id;
+} else if (S.drawer.type === "newjob") { $("drawer-title").textContent = "Add a role"; if (!$("job-form")) body.innerHTML = drawerNewJob(); }
+wrap.hidden = false;
+}
+let lastFocus;
+function openDrawer(d){ lastFocus = document.activeElement; S.drawer = d; renderDrawer(); $("drawer").querySelector(".drawer-bar .btn").focus({preventScroll:true}); }
+function closeDrawer(){ S.drawer = null; $("drawer").hidden = true; if (lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true}); }
+let raf = 0;
+const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); }); };
+function render(){
+$("nav").innerHTML = navHTML();
+const root = $("app");
+if (!S.connected) { if (!$("lock-form") || S.error) { root.innerHTML = viewLock(); root.classList.add("intro"); } return; }
+const ae = document.activeElement, keep = ae && root.contains(ae) && ae.id ? ae.id : null;
+const sel = keep && "selectionStart" in ae ? [ae.selectionStart, ae.selectionEnd] : null;
+if (keep && (/^p-|^n-|^t-(subject|body)$/.test(keep))) { renderDrawer(); return; }
+const v = {overview:viewOverview, discover:viewDiscover, pipeline:viewPipeline, outreach:viewOutreach, network:viewNetwork, templates:viewTemplates, setup:viewSetup}[S.tab];
+const openDetails = root.dataset.view === S.tab ? [...root.querySelectorAll("details")].map((d,i) => d.open ? i : -1).filter(i => i >= 0) : [];
+root.innerHTML = v();
+root.dataset.view = S.tab;
+if (openDetails.length) { const ds = root.querySelectorAll("details"); openDetails.forEach(i => ds[i] && (ds[i].open = true)); }
+root.classList.toggle("intro", S.intro);
+if (S.intro) { countUp(root); clearTimeout(render.t); render.t = setTimeout(() => { S.intro = false; root.classList.remove("intro"); root.querySelectorAll("[data-count]").forEach(el => el.textContent = el.dataset.count); }, 1600); }
+if (keep) { const el = $(keep); if (el) { el.focus({preventScroll:true}); if (sel && el.setSelectionRange) try { el.setSelectionRange(sel[0], sel[1]); } catch {} } }
+renderDrawer();
+}
+function countUp(root){
+const els = root.querySelectorAll("[data-count]"); if (!els.length) return;
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) { els.forEach(el => el.textContent = el.dataset.count); return; }
+const start = performance.now(), dur = 1100;
+const step = t => { const p = Math.min(1, (t - start) / dur), e = 1 - Math.pow(1 - p, 3); els.forEach(el => el.textContent = Math.round(Number(el.dataset.count) * e)); if (p < 1) requestAnimationFrame(step); };
+requestAnimationFrame(step);
+}
+function go(tab){ if (!TABS.some(t => t.k === tab)) return; S.tab = tab; S.intro = true; try { history.replaceState(null, "", "#" + tab); } catch {} render(); window.scrollTo({top:0, behavior:"smooth"}); }
+document.addEventListener("click", e => {
+const t = e.target;
+const tab = t.closest("[data-tab]"); if (tab) { go(tab.dataset.tab); return; }
+const fl = t.closest("[data-filter]"); if (fl) { S.filter = fl.dataset.filter; render(); return; }
+const tp = t.closest(".tpl-item[data-tpl]"); if (tp) { S.tpl.id = tp.dataset.tpl; S.tpl.editing = false; render(); return; }
+const a = t.closest("[data-act]");
+if (a) {
+const id = a.dataset.id, i = Number(a.dataset.i);
+switch (a.dataset.act) {
+case "close": closeDrawer(); break;
+case "approve": approve(id); break;
+case "pass": pass(id); break;
+case "restore": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].status = "new"; d[id].timeline = touch(d[id], "Restored"); } return d; }, `Restore ${j?.company}`, "Restored."); break; }
+case "status": setStatus(id, a.dataset.k); break;
+case "sent": toggleSent(id, i); break;
+case "copy": { const c = contactsOf(S.data.jobs[id] || {})[i]; if (c) copyText(c.subject ? `Subject: ${c.subject}\n\n${c.message}` : c.message, a, "Copy"); break; }
+case "followed": followedUp(id); break;
+case "scheduled": setNet(id, "scheduled"); break;
+case "netform": S.netForm = !S.netForm; render(); if (S.netForm) setTimeout(() => $("n-name")?.focus(), 0); break;
+case "newjob": openDrawer({type:"newjob"}); setTimeout(() => $("j-company")?.focus(), 30); break;
+case "rerun": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].outreach = {state:"queued", updatedAt:now(), note:"Requested from dashboard"}; d[id].timeline = touch(d[id], "Outreach requested"); } return d; }, `Queue outreach for ${j?.company}`, "Queued. Claude starts within the hour."); break; }
+case "save-profile": saveProfile(); break;
+case "refresh": loadAll(false).then(() => { render(); toast("Synced with GitHub."); }).catch(() => toast("Couldn't reach GitHub. Try again in a moment.")); break;
+case "disconnect": saveCfg({repo:S.cfg.repo}); S.connected = false; S.data = structuredClone(DEFAULTS); render(); break;
+case "tpl-copy": { const tt = currentTemplate(); copyText(fillTemplate(tt.body, tplVars(), false).replace(/\n{3,}/g,"\n\n").trim(), a, "Copy message"); break; }
+case "tpl-copy-subj": { const tt = currentTemplate(); copyText(fillTemplate(tt.subject, tplVars(), false), a, "Copy subject"); break; }
+case "tpl-edit": S.tpl.editing = !S.tpl.editing; render(); break;
+case "tpl-save": saveTemplate(); break;
+case "tpl-reset": resetTemplate(); break;
+case "tpl-for": S.tpl.id = a.dataset.tpl; S.tpl.first = a.dataset.name || ""; go("templates"); break;
+case "tpl-job": S.tpl.job = id; closeDrawer(); go("templates"); break;
+}
+return;
+}
+const o = t.closest("[data-open]");
+if (o && !t.closest("a,button:not([data-open]),summary,details,input,select,textarea")) openDrawer({type:"job", id:o.dataset.open});
+});
+document.addEventListener("keydown", e => {
+if (e.key === "Escape" && S.drawer) closeDrawer();
+else if ((e.key === "Enter" || e.key === " ") && e.target.matches("article[data-open]")) { e.preventDefault(); openDrawer({type:"job", id:e.target.dataset.open}); }
+});
+document.addEventListener("input", e => {
+const id = e.target.id;
+if (id === "q") { S.q = e.target.value; schedule(); }
+else if (id === "t-first") { S.tpl.first = e.target.value; schedule(); }
+else if (id === "t-context") { S.tpl.context = e.target.value; schedule(); }
+});
+document.addEventListener("change", e => {
+const el = e.target;
+if (el.id === "t-job") { S.tpl.job = el.value; render(); return; }
+if (el.id === "t-school") { S.tpl.school = el.value; render(); return; }
+if (el.dataset?.field && el.dataset.id) setField(el.dataset.id, el.dataset.field, el.dataset.kind === "date" ? fromDateInput(el.value) : el.value.trim());
+});
+document.addEventListener("submit", async e => {
+const f = e.target; e.preventDefault();
+if (f.id === "lock-form") {
+const repo = String(new FormData(f).get("repo")||"").trim().replace(/^https?:\/\/github\.com\//, "").replace(/\/$/, ""), token = String(new FormData(f).get("token")||"").trim();
+if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) { S.error = "Use the owner/name format, like Indo1919/job-search-hq-data."; render(); return; }
+if (!token) { S.error = "Paste your access token."; render(); return; }
+const btn = f.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = "Connecting…";
+try { await connect(repo, token); S.error = ""; S.intro = true; readyResolve(true); render(); startPolling(); toast("Connected. Welcome back."); }
+catch (err) { saveCfg({repo}); S.error = err.message || "Couldn't connect."; render(); }
+}
+if (f.id === "job-form") addJob(f);
+if (f.id === "net-form") addContact(f);
+});
+let pollT;
+function startPolling(){
+clearInterval(pollT);
+pollT = setInterval(async () => {
+if (document.hidden || !S.connected) return;
+try { if (await loadAll(true)) schedule(); } catch (e) { if (e.status === 401) { S.connected = false; S.error = "Your token expired or was revoked. Connect again."; render(); } }
+}, 45000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && S.connected) loadAll(true).then(c => c && schedule()).catch(() => {}); });
+}
+async function boot(){
+if (S.cfg.token && S.cfg.repo) {
+try { await loadAll(false); S.connected = true; readyResolve(true); render(); startPolling(); return; }
+catch (e) { S.error = e.status === 401 ? "Your token expired or was revoked. Connect again." : e.status === 404 ? "This token can't see your data repo anymore." : "Couldn't reach GitHub. Check your connection, then connect again."; }
+}
+readyResolve(false);
+render();
+}
+setInterval(() => { if (S.connected && !document.hidden && !S.drawer && S.tab === "overview") schedule(); }, 60000);
+boot();
+})();
+</script>
+</body>
+</html>
