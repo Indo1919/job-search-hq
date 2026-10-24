@@ -369,7 +369,7 @@ for (const j of jobs()) if (j.outreach?.state === "error") items.push({ic:"!", c
 for (const n of nets()) { const d = dayDiff(n.nextFollowUpAt); if (d != null && d <= 1 && !["warm","scheduled"].includes(n.status)) items.push({ic:"↩", c: d < 0 ? "ic-red" : "ic-amber", t:`Follow up with ${n.name}`, s:`${due(n.nextFollowUpAt).t}${n.org ? " · " + n.org : ""}`, go:"network", o:2}); }
 for (const c of m.sent) { const d = dayDiff(c.followUpAt); if (d != null && d <= 0) items.push({ic:"↩", c:"ic-amber", t:`Nudge ${c.name}`, s:`${c.job.company} · sent ${fmtDate(c.sentAt)}`, open:c.job.id, o:2}); }
 for (const j of jobs()) { const d = dayDiff(j.nextStepAt); if (j.nextStep && d != null && d >= 0 && d <= 3) items.push({ic:"★", c:"ic-pink", t:`${j.nextStep}`, s:`${j.company} · ${due(j.nextStepAt).t}`, open:j.id, o:1}); }
-if (m.newToday) items.push({ic:m.newToday, c:"ic-lav", t:`${plural(m.newToday, "new role")} today`, s:"From your LinkedIn search", go:"discover", o:3});
+if (m.newToday) items.push({ic:m.newToday, c:"ic-lav", t:`${plural(m.newToday, "new role")} today`, s:"From LinkedIn and company career sites", go:"discover", o:3});
 return items.sort((a, b) => (a.o ?? -1) - (b.o ?? -1));
 }
 function daysStrip(){
@@ -408,7 +408,7 @@ ${statusPill()}
 <h1 class="display rise">${esc(head2)}<br><span class="grad">${esc(head3)}</span></h1>
 <p class="lede rise">${summarySentence(m)}</p>
 <div class="kpis">
-${kpi("Roles to review", open.length, m.newToday ? `<span class="up">+${m.newToday}</span> today` : "From LinkedIn", m.sparkFound, "#cecbf7", "discover")}
+${kpi("Roles to review", open.length, m.newToday ? `<span class="up">+${m.newToday}</span> today` : "LinkedIn + career sites", m.sparkFound, "#cecbf7", "discover")}
 ${kpi("Applications", m.appliedAll.length, m.appliedWeek ? `<span class="up">+${m.appliedWeek}</span> this week` : "None this week yet", m.sparkApplied, "#aea6f0", "pipeline")}
 ${kpi("In conversation", m.convo.length, m.offers.length ? `${plural(m.offers.length, "offer")} on the table` : "Interviews and talks", m.sparkConvo, "#8f81e5", "pipeline")}
 ${kpi("Outreach", m.contacts.length, m.contacts.length ? `${m.sent.length} sent · ${m.drafts.length} to review` : "Approve a role to start", m.sparkSent, "#30d158", "outreach")}
@@ -462,7 +462,7 @@ const q = S.q.trim().toLowerCase(); if (q) list = list.filter(j => `${j.company}
 list.sort((a, b) => (Number(!!b.newGrad) - Number(!!a.newGrad)) || ((ts(b.postedAt) ?? ts(b.foundAt) ?? 0) - (ts(a.postedAt) ?? ts(a.foundAt) ?? 0)));
 const head = `<div class="section-head"><div><p class="eyebrow rise">Discover</p><h1 class="h2 rise">${leads.length} ${leads.length === 1 ? "role" : "roles"}. <span class="dim">Approve the ones worth your time.</span></h1></div><button class="btn" type="button" data-act="newjob">Add a role</button></div>`;
 const bar = `<div class="toolbar"><label class="search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.3" stroke="#6e6e73" stroke-width="1.7"/><path d="M11 11l3.6 3.6" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Search company, role or note" value="${esc(S.q)}" aria-label="Search roles"></label><div class="chips">${chips.map(c => `<button class="chip" type="button" data-filter="${c.k}" aria-pressed="${S.filter === c.k}">${c.l}<span class="n">${c.n}</span></button>`).join("")}</div></div>`;
-if (!list.length) return `<section class="view">${head}${bar}<div class="empty"><h3>${leads.length || passed.length ? "Nothing in this filter" : "No roles yet"}</h3><p>${leads.length || passed.length ? "Try another filter or clear the search." : "New-grad UI/UX roles from LinkedIn land here every two hours."}</p></div></section>`;
+if (!list.length) return `<section class="view">${head}${bar}<div class="empty"><h3>${leads.length || passed.length ? "Nothing in this filter" : "No roles yet"}</h3><p>${leads.length || passed.length ? "Try another filter or clear the search." : "Design roles from LinkedIn and 150 company career sites land here every two hours."}</p></div></section>`;
 return `<section class="view">${head}${bar}<div class="jobs">${list.map(jobCard).join("")}</div></section>`;
 }
 function outreachTag(j){
@@ -566,10 +566,10 @@ return `<section class="view"><div class="section-head"><div><p class="eyebrow r
 </div><div class="acts" style="margin-top:16px"><button class="btn btn-white" type="button" data-act="save-profile">Save</button></div></div>
 <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
 <div class="card rise"><div class="card-h"><h2 class="h3">Automation</h2><span class="tag tag-green">Running</span></div><dl class="kv">
-<dt>Scan</dt><dd>LinkedIn and Gmail every 2 hours, 8 AM to 10 PM</dd>
+<dt>Scan</dt><dd>Company career sites every 2 hours, around the clock, on GitHub. LinkedIn and Gmail every 2 hours from 8 AM to 10 PM while your Mac is awake.</dd>
 <dt>Outreach</dt><dd>Approved roles get about 5 people and drafts, every hour</dd>
 <dt>Last scan</dt><dd>${a.lastRadarAt ? `${esc(fmtDate(a.lastRadarAt))}, ${esc(fmtTime(a.lastRadarAt))}` : "Not yet"}${a.lastRadarNote ? ` · ${esc(a.lastRadarNote)}` : ""}</dd>
-<dt>Sources</dt><dd>LinkedIn ${a.connections?.linkedin ? "✓" : "—"} · Gmail ${a.connections?.gmail ? "✓" : "—"} · Outlook ${a.connections?.outlook ? "✓" : "not linked"}</dd>
+<dt>Sources</dt><dd>Career sites ${a.lastBoardsAt ? "✓" : "—"} · LinkedIn ${a.connections?.linkedin ? "✓" : "—"} · Gmail ${a.connections?.gmail ? "✓" : "—"} · Outlook ${a.connections?.outlook ? "✓" : "not linked"}</dd>
 <dt>Sending</dt><dd>Never automatic. Drafts wait for you.</dd>
 </dl></div>
 <div class="card rise"><div class="card-h"><h2 class="h3">Connection</h2></div><dl class="kv"><dt>Data</dt><dd class="mono-text" style="font-family:var(--mono);font-size:13px">${esc(S.cfg.repo)}</dd><dt>Token</dt><dd>Saved on this device only</dd><dt>Synced</dt><dd>${esc(rel(S.lastSync))}</dd></dl><div class="acts" style="margin-top:16px;justify-content:flex-start"><button class="btn btn-sm" type="button" data-act="refresh">Sync now</button><button class="btn btn-sm btn-ghost" type="button" data-act="disconnect">Disconnect this device</button></div></div>
@@ -608,7 +608,7 @@ ${j.note ? `<div class="card" style="padding:18px"><p style="margin:0;font-size:
 <div class="field"><label for="d-next">Next step</label><input class="input" id="d-next" data-field="nextStep" data-id="${esc(j.id)}" value="${esc(j.nextStep || "")}" placeholder="e.g. Portfolio review"></div>
 <div class="field"><label for="d-nextat">Date</label><input class="input" id="d-nextat" type="date" data-field="nextStepAt" data-kind="date" data-id="${esc(j.id)}" value="${esc(toDateInput(j.nextStepAt))}"></div>
 <div class="field wide"><label for="d-notes">Notes</label><textarea class="textarea" id="d-notes" data-field="notes" data-id="${esc(j.id)}" placeholder="Anything worth remembering">${esc(j.notes || "")}</textarea></div>
-</div><dl class="kv" style="margin-top:16px">${j.appliedAt ? `<dt>Applied</dt><dd>${esc(fmtDate(j.appliedAt))}</dd>` : ""}${j.postedAt ? `<dt>Posted</dt><dd>${esc(fmtDate(j.postedAt))}</dd>` : ""}<dt>Source</dt><dd>${esc(j.source || "LinkedIn")}</dd>${url ? `<dt>Posting</dt><dd><a href="${esc(url)}" target="_blank" rel="noopener">Open on LinkedIn ↗</a></dd>` : ""}</dl></div>
+</div><dl class="kv" style="margin-top:16px">${j.appliedAt ? `<dt>Applied</dt><dd>${esc(fmtDate(j.appliedAt))}</dd>` : ""}${j.postedAt ? `<dt>Posted</dt><dd>${esc(fmtDate(j.postedAt))}</dd>` : ""}<dt>Source</dt><dd>${esc(j.source || "LinkedIn")}</dd>${url ? `<dt>Posting</dt><dd><a href="${esc(url)}" target="_blank" rel="noopener">${/linkedin\.com/i.test(url) ? "Open on LinkedIn" : "Open on careers site"} ↗</a></dd>` : ""}</dl></div>
 ${j.lastEmail?.subject ? `<div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:8px">Latest email</h3><div style="font-weight:600">${esc(j.lastEmail.subject)}</div><div class="small">${esc(j.lastEmail.from || "")} · ${esc(rel(j.lastEmail.at))}</div>${j.lastEmail.snippet ? `<p style="margin:10px 0 0;color:var(--text-2);font-size:14.5px">${esc(j.lastEmail.snippet)}</p>` : ""}${safeUrl(j.lastEmail.url) ? `<p style="margin:10px 0 0"><a href="${esc(safeUrl(j.lastEmail.url))}" target="_blank" rel="noopener">Open in Gmail ↗</a></p>` : ""}</div>` : ""}
 <div class="card" style="padding:18px"><div class="card-h" style="margin-bottom:10px"><h3 class="h3" style="font-size:16px">People to message</h3>${contactsOf(j).length ? `<button class="btn btn-sm btn-ghost" type="button" data-act="tpl-job" data-id="${esc(j.id)}">Templates</button>` : ""}</div>${people}</div>
 ${tl.length ? `<div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:10px">History</h3><ul class="timeline">${tl.map(e => `<li><span></span><time>${esc(fmtDate(e.at))}</time><span>${esc(e.text)}</span></li>`).join("")}</ul></div>` : ""}`;
