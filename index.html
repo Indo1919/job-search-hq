@@ -111,6 +111,8 @@ const contactsOf = j => Array.isArray(j.contacts) ? j.contacts : [];
 const pending = j => contactsOf(j).filter(c => c.status !== "sent").length;
 const isNYC = j => /new york|nyc|\bny\b|new rochelle|jersey city|brooklyn/i.test(j.location||"");
 const isRemote = j => /remote/i.test(`${j.location||""} ${j.workplace||""}`);
+const jobType = j => j.jobType || (/\b(intern|internship|co-op|apprentice)/i.test(j.role||"") ? "Internship" : /part[- ]time/i.test(j.role||"") ? "Part-time" : /contract|freelance/i.test(j.role||"") ? "Contract" : "Full-time");
+const isPT = j => ["Part-time","Contract"].includes(jobType(j));
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
 const plural = (n, w, p) => `${n} ${n === 1 ? w : (p || w + "s")}`;
 const profile = () => S.data.settings.profile || {};
@@ -424,7 +426,7 @@ ${list.length ? `<ul class="needs">${list.slice(0,6).map(it => `<li><button clas
 <div class="grid-2">
 <div class="card rise"><div class="card-h"><h2 class="h3">Activity</h2><div class="legend"><span><i style="background:rgba(206,203,247,.4)"></i>Roles found</span><span><i style="background:#8f81e5"></i>Applied</span><span><i style="background:#30d158"></i>Outreach sent</span></div></div>${activityChart()}</div>
 <div class="card rise"><div class="card-h"><h2 class="h3">Open roles</h2><span class="small">${ng} new grad · ${early} early applicant</span></div>
-<div class="donut-wrap">${donut(loc.map(l => ({v:l.v, c:l.c})))}<div class="dl">${loc.map(l => `<div><i style="background:${l.c}"></i>${l.l}<b>${l.v}</b></div>`).join("")}<div><i style="background:var(--green)"></i>New grad<b>${ng}</b></div></div></div>
+<div class="donut-wrap">${donut(loc.map(l => ({v:l.v, c:l.c})))}<div class="dl">${loc.map(l => `<div><i style="background:${l.c}"></i>${l.l}<b>${l.v}</b></div>`).join("")}<div><i style="background:var(--green)"></i>New grad<b>${ng}</b></div><div><i style="background:var(--pink)"></i>Internships<b>${open.filter(j=>jobType(j)==="Internship").length}</b></div><div><i style="background:var(--amber)"></i>Part-time & contract<b>${open.filter(isPT).length}</b></div></div></div>
 </div>
 </div>
 </section>
@@ -435,7 +437,7 @@ ${list.length ? `<ul class="needs">${list.slice(0,6).map(it => `<li><button clas
 function jobCard(j){
 const url = safeUrl(j.url);
 const posted = j.postedAt ? `Posted ${rel(j.postedAt)}` : (j.postedLabel || "");
-const tags = [j.newGrad && `<span class="tag tag-green">New grad</span>`, j.early && `<span class="tag tag-lav">Early applicant</span>`, j.salary && `<span class="tag">${esc(j.salary)}</span>`, posted && `<span class="tag">${esc(posted)}</span>`].filter(Boolean).join("");
+const tags = [`<span class="tag ${jobType(j) === "Internship" ? "tag-pink" : isPT(j) ? "tag-amber" : ""}">${jobType(j)}</span>`, j.newGrad && `<span class="tag tag-green">New grad</span>`, j.early && `<span class="tag tag-lav">Early applicant</span>`, j.salary && `<span class="tag">${esc(j.salary)}</span>`, posted && `<span class="tag">${esc(posted)}</span>`].filter(Boolean).join("");
 const actions = j.status === "passed" ? `<button class="btn btn-sm" type="button" data-act="restore" data-id="${esc(j.id)}">Restore</button>` : `<button class="btn btn-approve" type="button" data-act="approve" data-id="${esc(j.id)}">Approve</button><button class="btn btn-ghost" type="button" data-act="pass" data-id="${esc(j.id)}">Pass</button>`;
 return `<article class="job rise" data-open="${esc(j.id)}" tabindex="0" aria-label="${esc(j.company)} — ${esc(j.role)}">
 <div class="job-top">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h3>${esc(j.role)}</h3></div></div>
@@ -447,13 +449,16 @@ ${j.note ? `<p class="note">${esc(j.note)}</p>` : ""}
 }
 function viewDiscover(){
 const all = jobs(); const leads = all.filter(j => j.status === "new"), passed = all.filter(j => j.status === "passed");
-const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
+const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"intern",l:"Internships",n:leads.filter(j=>jobType(j)==="Internship").length},{k:"pt",l:"Part-time & contract",n:leads.filter(isPT).length},{k:"ft",l:"Full-time",n:leads.filter(j=>jobType(j)==="Full-time").length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
 let list = S.filter === "passed" ? passed : leads;
 if (S.filter === "newgrad") list = list.filter(j => j.newGrad);
 if (S.filter === "nyc") list = list.filter(isNYC);
 if (S.filter === "remote") list = list.filter(isRemote);
 if (S.filter === "early") list = list.filter(j => j.early);
-const q = S.q.trim().toLowerCase(); if (q) list = list.filter(j => `${j.company} ${j.role} ${j.location} ${j.note}`.toLowerCase().includes(q));
+if (S.filter === "intern") list = list.filter(j => jobType(j) === "Internship");
+if (S.filter === "pt") list = list.filter(isPT);
+if (S.filter === "ft") list = list.filter(j => jobType(j) === "Full-time");
+const q = S.q.trim().toLowerCase(); if (q) list = list.filter(j => `${j.company} ${j.role} ${j.location} ${j.note} ${jobType(j)}`.toLowerCase().includes(q));
 list.sort((a, b) => (Number(!!b.newGrad) - Number(!!a.newGrad)) || ((ts(b.postedAt) ?? ts(b.foundAt) ?? 0) - (ts(a.postedAt) ?? ts(a.foundAt) ?? 0)));
 const head = `<div class="section-head"><div><p class="eyebrow rise">Discover</p><h1 class="h2 rise">${leads.length} ${leads.length === 1 ? "role" : "roles"}. <span class="dim">Approve the ones worth your time.</span></h1></div><button class="btn" type="button" data-act="newjob">Add a role</button></div>`;
 const bar = `<div class="toolbar"><label class="search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.3" stroke="#6e6e73" stroke-width="1.7"/><path d="M11 11l3.6 3.6" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Search company, role or note" value="${esc(S.q)}" aria-label="Search roles"></label><div class="chips">${chips.map(c => `<button class="chip" type="button" data-filter="${c.k}" aria-pressed="${S.filter === c.k}">${c.l}<span class="n">${c.n}</span></button>`).join("")}</div></div>`;
@@ -594,7 +599,7 @@ const people = contactsOf(j).length ? `<div class="list" style="margin:0 -2px">$
 : ["queued","working"].includes(o.state) ? `<div class="stateline" style="padding:4px 0"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team now." : "Queued. Claude starts within the hour."}</div>`
 : ["new","passed"].includes(j.status) ? `<p class="small" style="margin:0 0 14px">Approve this role and Claude finds about 5 people to message, with a draft for each.</p><button class="btn btn-approve" type="button" data-act="approve" data-id="${esc(j.id)}">Approve</button>`
 : `<p class="small" style="margin:0 0 14px">No outreach for this role yet.</p><button class="btn btn-sm" type="button" data-act="rerun" data-id="${esc(j.id)}">Find people</button>`;
-return `<div class="d-hero">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h2>${esc(j.role)}</h2><div class="meta">${esc([j.location, j.workplace, j.salary].filter(Boolean).join(" · "))}</div></div></div>
+return `<div class="d-hero">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h2>${esc(j.role)}</h2><div class="meta">${esc([jobType(j), j.location, j.workplace, j.salary].filter(Boolean).join(" · "))}</div></div></div>
 <div class="steps" role="group" aria-label="Status">${STATUS.map(s => `<button type="button" data-act="status" data-id="${esc(j.id)}" data-k="${s.k}" aria-pressed="${j.status === s.k}">${s.l}</button>`).join("")}</div>
 ${j.note ? `<div class="card" style="padding:18px"><p style="margin:0;font-size:15px;color:var(--text-2)">${esc(j.note)}</p></div>` : ""}
 <div class="card" style="padding:18px"><h3 class="h3" style="font-size:16px;margin-bottom:14px">Tracking</h3><div class="form-grid">
