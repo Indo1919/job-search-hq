@@ -211,8 +211,8 @@ async log(text){ await mutate("settings", s => { s.app ||= {}; s.app.log = [...(
 const touch = (j, text) => [...(Array.isArray(j.timeline) ? j.timeline : []), {at:now(), text}].slice(-80);
 function approve(id){
 const j = S.data.jobs[id]; if (!j) return;
-save("jobs", d => { const x = d[id]; if (!x) return d; x.status = "approved"; x.approvedAt ||= now(); x.outreach = {state:"queued", updatedAt:now(), note:"Queued — Claude starts within the hour"}; x.timeline = touch(x, "Approved — outreach queued"); return d; },
-`Approve ${j.company} — ${j.role}`, `Approved. Claude will find people at ${j.company} within the hour.`);
+save("jobs", d => { const x = d[id]; if (!x) return d; x.status = "approved"; x.approvedAt ||= now(); x.outreach = {state:"queued", updatedAt:now(), note:"Queued — Claude starts the people search shortly"}; x.timeline = touch(x, "Approved — outreach queued"); return d; },
+`Approve ${j.company} — ${j.role}`, (app().instantOutreach ? `Approved. Claude is starting the people search at ${j.company} now.` : `Approved. Claude will find people at ${j.company} at the next hourly run.`));
 }
 function pass(id){
 const j = S.data.jobs[id]; if (!j) return; const prev = j.status;
@@ -364,7 +364,7 @@ function needs(m){
 const items = [];
 if (!safeUrl(profile().portfolioUrl)) items.push({ic:"!", c:"ic-red", t:"Add your portfolio link", s:"Every draft and template uses it", go:"setup"});
 for (const j of jobs()) { const p = pending(j); if (j.outreach?.state === "ready" && p) items.push({ic:p, c:"ic-green", t:`Review ${plural(p,"draft")} for ${j.company}`, s:j.role, open:j.id, o:0}); }
-for (const j of jobs()) if (["queued","working"].includes(j.outreach?.state)) items.push({ic:"…", c:"ic-lav", t:`Finding people at ${j.company}`, s: j.outreach.state === "working" ? "Claude is researching the team" : "Starts within the hour", open:j.id, o:1});
+for (const j of jobs()) if (["queued","working"].includes(j.outreach?.state)) items.push({ic:"…", c:"ic-lav", t:`Finding people at ${j.company}`, s: j.outreach.state === "working" ? "Claude is researching the team" : (j.outreach.firedAt ? "Claude is starting now" : "Starts at the next hourly run"), open:j.id, o:1});
 for (const j of jobs()) if (j.outreach?.state === "error") items.push({ic:"!", c:"ic-red", t:`Outreach stalled at ${j.company}`, s:j.outreach.note || "Retries on the next run", open:j.id, o:1});
 for (const n of nets()) { const d = dayDiff(n.nextFollowUpAt); if (d != null && d <= 1 && !["warm","scheduled"].includes(n.status)) items.push({ic:"↩", c: d < 0 ? "ic-red" : "ic-amber", t:`Follow up with ${n.name}`, s:`${due(n.nextFollowUpAt).t}${n.org ? " · " + n.org : ""}`, go:"network", o:2}); }
 for (const c of m.sent) { const d = dayDiff(c.followUpAt); if (d != null && d <= 0) items.push({ic:"↩", c:"ic-amber", t:`Nudge ${c.name}`, s:`${c.job.company} · sent ${fmtDate(c.sentAt)}`, open:c.job.id, o:2}); }
@@ -444,7 +444,7 @@ return `<article class="job rise" data-open="${esc(j.id)}" tabindex="0" aria-lab
 <div class="meta">${esc([j.location, j.workplace].filter(Boolean).join(" · "))}</div>
 ${tags ? `<div class="tags">${tags}</div>` : ""}
 ${j.note ? `<p class="note">${esc(j.note)}</p>` : ""}
-<div class="job-actions">${actions}<span class="grow"></span>${url ? `<a class="btn btn-sm btn-ghost" href="${esc(url)}" target="_blank" rel="noopener">Posting ↗</a>` : ""}</div>
+<div class="job-actions">${actions}<span class="grow"></span>${url ? `<a class="btn btn-sm btn-ghost" href="${esc(url)}" target="_blank" rel="noopener">Open posting ↗</a>` : ""}</div>
 </article>`;
 }
 function viewDiscover(){
@@ -499,7 +499,7 @@ const m = metrics();
 const head = `<div class="section-head"><div><p class="eyebrow rise">Outreach</p><h1 class="h2 rise">${m.drafts.length} to review. <span class="dim">${m.sent.length} sent.</span></h1></div><button class="btn" type="button" data-tab="templates">Message templates</button></div>`;
 if (!list.length) return `<section class="view">${head}<div class="empty"><h3>No outreach yet</h3><p>Approve a role and Claude finds about five people for it: the recruiter, the likely hiring manager, designers on the team and an alum when there is one. It writes a draft for each. You review and send.</p></div></section>`;
 return `<section class="view">${head}${list.map(j => { const o = j.outreach || {};
-const st = ["queued","working"].includes(o.state) ? `<div class="stateline"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team" : "Queued, starts within the hour"}${o.updatedAt ? ` · ${esc(rel(o.updatedAt))}` : ""}</div>` : o.state === "error" ? `<div class="stateline" style="color:var(--red)">${esc(o.note || "Outreach stalled. It retries on the next run.")}</div>` : "";
+const st = ["queued","working"].includes(o.state) ? `<div class="stateline"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team" : (o.firedAt ? "Claude is starting now" : "Queued for the next hourly run")}${o.updatedAt ? ` · ${esc(rel(o.updatedAt))}` : ""}</div>` : o.state === "error" ? `<div class="stateline" style="color:var(--red)">${esc(o.note || "Outreach stalled. It retries on the next run.")}</div>` : "";
 return `<div class="list ob rise"><div class="ob-h" data-open="${esc(j.id)}">${logo(j.company)}<div style="flex:1;min-width:0"><div class="co" style="font-size:13px">${esc(j.company)}${j.reqId || j.linkedinJobId ? ` · Job ${esc(j.reqId || j.linkedinJobId)}` : ""}</div><div style="font-weight:600">${esc(j.role)}</div></div>${outreachTag(j)}</div>${st}${contactsOf(j).map((c,i) => contactHTML(j,c,i)).join("")}</div>`; }).join("")}</section>`;
 }
 function viewNetwork(){
@@ -596,7 +596,7 @@ ${S.error ? `<div class="err" role="alert">${esc(S.error)}</div>` : ""}
 function drawerJob(j){
 const url = safeUrl(j.url), o = j.outreach || {}, tl = [...(j.timeline || [])].reverse();
 const people = contactsOf(j).length ? `<div class="list" style="margin:0 -2px">${contactsOf(j).map((c,i) => contactHTML(j,c,i)).join("")}</div>`
-: ["queued","working"].includes(o.state) ? `<div class="stateline" style="padding:4px 0"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team now." : "Queued. Claude starts within the hour."}</div>`
+: ["queued","working"].includes(o.state) ? `<div class="stateline" style="padding:4px 0"><span class="spin"></span>${o.state === "working" ? "Claude is researching the team now." : (o.firedAt ? "Claude is starting now." : "Queued for the next hourly run.")}</div>`
 : ["new","passed"].includes(j.status) ? `<p class="small" style="margin:0 0 14px">Approve this role and Claude finds about 5 people to message, with a draft for each.</p><button class="btn btn-approve" type="button" data-act="approve" data-id="${esc(j.id)}">Approve</button>`
 : `<p class="small" style="margin:0 0 14px">No outreach for this role yet.</p><button class="btn btn-sm" type="button" data-act="rerun" data-id="${esc(j.id)}">Find people</button>`;
 return `<div class="d-hero">${logo(j.company)}<div style="min-width:0"><div class="co">${esc(j.company)}</div><h2>${esc(j.role)}</h2><div class="meta">${esc([jobType(j), j.location, j.workplace, j.salary].filter(Boolean).join(" · "))}</div></div></div>
@@ -673,7 +673,7 @@ if (a) {
 const id = a.dataset.id, i = Number(a.dataset.i);
 switch (a.dataset.act) {
 case "close": closeDrawer(); break;
-case "approve": approve(id); break;
+case "approve": { const jj = S.data.jobs[id]; const u = jj && (jj.applyUrl || jj.url); if (u && !/search-results/.test(u)) window.open(u, "_blank", "noopener"); approve(id); break; }
 case "pass": pass(id); break;
 case "restore": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].status = "new"; d[id].timeline = touch(d[id], "Restored"); } return d; }, `Restore ${j?.company}`, "Restored."); break; }
 case "status": setStatus(id, a.dataset.k); break;
@@ -683,7 +683,7 @@ case "followed": followedUp(id); break;
 case "scheduled": setNet(id, "scheduled"); break;
 case "netform": S.netForm = !S.netForm; render(); if (S.netForm) setTimeout(() => $("n-name")?.focus(), 0); break;
 case "newjob": openDrawer({type:"newjob"}); setTimeout(() => $("j-company")?.focus(), 30); break;
-case "rerun": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].outreach = {state:"queued", updatedAt:now(), note:"Requested from dashboard"}; d[id].timeline = touch(d[id], "Outreach requested"); } return d; }, `Queue outreach for ${j?.company}`, "Queued. Claude starts within the hour."); break; }
+case "rerun": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].outreach = {state:"queued", updatedAt:now(), note:"Requested from dashboard"}; d[id].timeline = touch(d[id], "Outreach requested"); } return d; }, `Queue outreach for ${j?.company}`, "Queued. Claude starts shortly."); break; }
 case "save-profile": saveProfile(); break;
 case "refresh": loadAll(false).then(() => { render(); toast("Synced with GitHub."); }).catch(() => toast("Couldn't reach GitHub. Try again in a moment.")); break;
 case "disconnect": saveCfg({repo:S.cfg.repo}); S.connected = false; S.data = structuredClone(DEFAULTS); render(); break;
