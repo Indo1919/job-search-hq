@@ -39,11 +39,14 @@ const NET = {waiting:["Waiting on them",""], replied:["They replied","tag-green"
 const LOGO_BG = ["linear-gradient(135deg,#8f81e5,#705dc8)","linear-gradient(135deg,#ff8aa8,#c2302b)","linear-gradient(135deg,#64d2ff,#0a84ff)","linear-gradient(135deg,#30d158,#1f8f45)","linear-gradient(135deg,#ffb340,#d97706)","linear-gradient(135deg,#c9b9ac,#8a7768)","linear-gradient(135deg,#cecbf7,#8f81e5)","linear-gradient(135deg,#5e5ce6,#3634a3)","linear-gradient(135deg,#ff6961,#b3261e)","linear-gradient(135deg,#a1a1a6,#48484a)"];
 const TEMPLATES = [
 {id:"rec-email", group:"Recruiters", name:"Recruiter email after applying", when:"Same day you apply. Highest-signal first touch.", channel:"Email",
-subject:"{role} (Job {job_number}) — Matias Indacochea",
-body:"Hi {first_name},\n\nI just applied for the {role} role at {company} (Job {job_number}) and wanted to reach out directly. I'm a UI/UX designer working at the intersection of design and AI. I studied Industrial & Interaction Design at Syracuse and I'm now doing my Master's in Digital Product Design at Parsons here in New York.\n\n{context}\n\nMy work is here: {portfolio}. If you're the right person for this role, I'd love 15 minutes to talk about the team. If not, I'd really appreciate knowing who is.\n\nThanks so much,\nMatias\n{linkedin}",
+subject:"Matias Indacochea: would love your perspective on {company}'s design team",
+body:"Hi {first_name},\n\nI'm Matias Indacochea, a UI/UX designer here in New York doing my master's in Communication Design at Parsons. I recently applied to the {role} role at {company} (Job {job_number}), and I wanted to reach out and introduce myself.\n\nI'd love to learn more about the role and the team, and any guidance you're open to sharing on what the team looks for would mean a lot.\n\n{context}\n\nA little about me: most of my work sits where design meets AI. I was Head of Design at Jetzy and built Scowtt's brand and UI system from the ground up. My work is here: {portfolio}\n\nWould you be open to a quick 15-minute chat sometime in the next couple of weeks?\n\nThanks so much,\nMatias",
 contextHint:"One line on why this team. Example: I took Scowtt's brand and UI system from zero through its Series A, and your team is at a similar stage."},
-{id:"rec-li", group:"Recruiters", name:"Recruiter LinkedIn note", when:"Connection request. Keep it under 300 characters.", channel:"LinkedIn", limit:300,
-body:"Hi {first_name}, I just applied for the {role} role at {company} (Job {job_number}). I'm a UI/UX designer focused on AI products, now at Parsons in NYC. Would love to connect and hear what the team looks for. Work: {portfolio}"},
+{id:"li-msg", group:"Recruiters", name:"LinkedIn message (your baseline)", when:"Message or InMail after you apply. For a connection request, use the short note below.", channel:"LinkedIn",
+body:"Hi {first_name},\n\nI'm Matias. I recently applied for the {role} role at {company} and wanted to reach out to introduce myself.\n\nI'm a product designer in New York, currently doing my master's in Communication Design at Parsons after studying Industrial & Interaction Design at Syracuse. Most of my work is about making complex systems feel simple, and lately about how AI can take friction out of everyday workflows. {context}\n\nBefore Parsons, I led design at Jetzy and built Scowtt's brand and UI system from the ground up through its Series A. You can see that work here: {portfolio}\n\nI'd love to connect, and if you have any insight into the hiring process or how I could best position myself for the team, I'd really appreciate it.\n\nThank you for your time,\nMatias Indacochea",
+contextHint:"One line on why this company. Example: The way Ramp turns tedious finance work into something that just runs in the background is exactly the kind of product I want to help build."},
+{id:"rec-li", group:"Recruiters", name:"LinkedIn connection note (short)", when:"Connection request. LinkedIn caps notes at 200 to 300 characters depending on your plan.", channel:"LinkedIn", limit:200,
+body:"Hi {first_name}, I'm Matias, a product designer at Parsons. I recently applied for {company}'s {role} role and would love to connect and learn more about the team. My work: {portfolio}"},
 {id:"hm-email", group:"Hiring team", name:"Hiring manager email", when:"After applying, when you can find the design lead or manager.", channel:"Email",
 subject:"{role} at {company}",
 body:"Hi {first_name},\n\nI applied for the {role} role on your team (Job {job_number}) and wanted to say hello directly. {context}\n\nA bit about me: I joined Jetzy as a design intern and was promoted to Head of Design within a month, and I built Scowtt's brand and UI system from zero through its Series A. Most recently I designed and built Halo, an AI work-visibility tool, as my capstone for Stanford's UX Design for AI Products.\n\nHere's my work: {portfolio}. I'd love to hear what your team is focused on and whether my background could help.\n\nThanks so much,\nMatias",
@@ -109,7 +112,7 @@ const jobs = () => Object.values(S.data.jobs);
 const nets = () => Object.values(S.data.network);
 const contactsOf = j => Array.isArray(j.contacts) ? j.contacts : [];
 const pending = j => contactsOf(j).filter(c => c.status !== "sent").length;
-const isNYC = j => /new york|nyc|\bny\b|new rochelle|jersey city|brooklyn/i.test(j.location||"");
+const isNYC = j => /new york|nyc|\bny\b|new rochelle|jersey city|brooklyn|manhattan|queens|bronx|hoboken|newark|stamford|white plains|westchester|long island/i.test(j.location||"");
 const isRemote = j => /remote/i.test(`${j.location||""} ${j.workplace||""}`);
 const jobType = j => j.jobType || (/\b(intern|internship|co-op|apprentice)/i.test(j.role||"") ? "Internship" : /part[- ]time/i.test(j.role||"") ? "Part-time" : /contract|freelance/i.test(j.role||"") ? "Contract" : "Full-time");
 const isPT = j => ["Part-time","Contract"].includes(jobType(j));
@@ -395,7 +398,7 @@ const f = [
 const fmax = Math.max(1, f[0].n);
 const funnel = f.map((s, i) => `<div class="f-row"><span class="f-label"><i style="background:${s.c}"></i>${s.l}</span><div style="min-width:0"><div class="f-track"><div class="f-fill" style="--w:${(s.n/fmax*100).toFixed(1)}%;background:${s.c}"></div></div>${i < f.length-1 && f[i].n ? `<div class="f-conv">${Math.round((f[i+1].n / f[i].n) * 100)}% move to ${f[i+1].l.toLowerCase()}</div>` : ""}</div><span class="f-n">${s.n}</span></div>`).join("");
 const open = m.open;
-const loc = [{l:"New York area", v:open.filter(isNYC).length, c:"#cecbf7"}, {l:"Remote", v:open.filter(j => !isNYC(j) && isRemote(j)).length, c:"#8f81e5"}, {l:"Elsewhere", v:open.filter(j => !isNYC(j) && !isRemote(j)).length, c:"#48484a"}];
+const loc = [{l:"New York area", v:open.filter(isNYC).length, c:"#cecbf7"}, {l:"Remote", v:open.filter(j => !isNYC(j) && isRemote(j)).length, c:"#8f81e5"}, {l:"Other US cities", v:open.filter(j => !isNYC(j) && !isRemote(j)).length, c:"#48484a"}];
 const ng = open.filter(j => j.newGrad).length, early = open.filter(j => j.early).length;
 const list = needs(m);
 const draftsReady = m.drafts.length;
@@ -449,10 +452,11 @@ ${j.note ? `<p class="note">${esc(j.note)}</p>` : ""}
 }
 function viewDiscover(){
 const all = jobs(); const leads = all.filter(j => j.status === "new"), passed = all.filter(j => j.status === "passed");
-const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"intern",l:"Internships",n:leads.filter(j=>jobType(j)==="Internship").length},{k:"pt",l:"Part-time & contract",n:leads.filter(isPT).length},{k:"ft",l:"Full-time",n:leads.filter(j=>jobType(j)==="Full-time").length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
+const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"elsewhere",l:"Other US cities",n:leads.filter(j=>!isNYC(j)&&!isRemote(j)).length},{k:"intern",l:"Internships",n:leads.filter(j=>jobType(j)==="Internship").length},{k:"pt",l:"Part-time & contract",n:leads.filter(isPT).length},{k:"ft",l:"Full-time",n:leads.filter(j=>jobType(j)==="Full-time").length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
 let list = S.filter === "passed" ? passed : leads;
 if (S.filter === "newgrad") list = list.filter(j => j.newGrad);
 if (S.filter === "nyc") list = list.filter(isNYC);
+if (S.filter === "elsewhere") list = list.filter(j => !isNYC(j) && !isRemote(j));
 if (S.filter === "remote") list = list.filter(isRemote);
 if (S.filter === "early") list = list.filter(j => j.early);
 if (S.filter === "intern") list = list.filter(j => jobType(j) === "Internship");
@@ -490,7 +494,8 @@ return `<div class="contact"><div class="av" aria-hidden="true">${esc(initials(c
 <div class="c-name">${esc(c.name)}<span>${esc(c.title || "")}</span></div>
 ${c.why ? `<div class="c-why">${esc(c.why)}</div>` : ""}
 ${c.message ? `<details class="msg"><summary>${c.channel === "email" ? `Email${c.email ? " · " + esc(c.email) : ""}` : "LinkedIn message"}${c.subject ? ` — ${esc(c.subject)}` : ""}</summary><pre>${esc(c.message)}</pre></details>` : ""}
-<div class="acts" style="justify-content:flex-start">${c.message ? `<button class="btn btn-sm" type="button" data-act="copy" data-id="${esc(j.id)}" data-i="${i}">Copy</button>` : ""}${gd ? `<a class="btn btn-sm" href="${esc(gd)}" target="_blank" rel="noopener">Gmail draft ↗</a>` : ""}${li ? `<a class="btn btn-sm" href="${esc(li)}" target="_blank" rel="noopener">Profile ↗</a>` : ""}<button class="btn btn-sm ${sent ? "on" : ""}" type="button" data-act="sent" data-id="${esc(j.id)}" data-i="${i}">${sent ? "Sent ✓" : "Mark sent"}</button>${fu ? `<span class="due ${fu.c}" style="align-self:center">Follow up ${esc(fu.t.toLowerCase())}</span>` : ""}</div>
+${c.shortNote ? `<details class="msg"><summary>Short connection note · ${c.shortNote.length} characters</summary><pre>${esc(c.shortNote)}</pre></details>` : ""}
+<div class="acts" style="justify-content:flex-start">${c.message ? `<button class="btn btn-sm" type="button" data-act="copy" data-id="${esc(j.id)}" data-i="${i}">${c.channel === "linkedin" ? "Copy message" : "Copy"}</button>` : ""}${c.shortNote ? `<button class="btn btn-sm" type="button" data-act="copyshort" data-id="${esc(j.id)}" data-i="${i}">Copy short note</button>` : ""}${gd ? `<a class="btn btn-sm" href="${esc(gd)}" target="_blank" rel="noopener">Gmail draft ↗</a>` : ""}${li ? `<a class="btn btn-sm" href="${esc(li)}" target="_blank" rel="noopener">Profile ↗</a>` : ""}<button class="btn btn-sm ${sent ? "on" : ""}" type="button" data-act="sent" data-id="${esc(j.id)}" data-i="${i}">${sent ? "Sent ✓" : "Mark sent"}</button>${fu ? `<span class="due ${fu.c}" style="align-self:center">Follow up ${esc(fu.t.toLowerCase())}</span>` : ""}</div>
 </div></div>`;
 }
 function viewOutreach(){
@@ -678,6 +683,7 @@ case "pass": pass(id); break;
 case "restore": { const j = S.data.jobs[id]; save("jobs", d => { if (d[id]) { d[id].status = "new"; d[id].timeline = touch(d[id], "Restored"); } return d; }, `Restore ${j?.company}`, "Restored."); break; }
 case "status": setStatus(id, a.dataset.k); break;
 case "sent": toggleSent(id, i); break;
+case "copyshort": { const c = contactsOf(S.data.jobs[id] || {})[i]; if (c && c.shortNote) copyText(c.shortNote, a, "Copy short note"); break; }
 case "copy": { const c = contactsOf(S.data.jobs[id] || {})[i]; if (c) copyText(c.subject ? `Subject: ${c.subject}\n\n${c.message}` : c.message, a, "Copy"); break; }
 case "followed": followedUp(id); break;
 case "scheduled": setNet(id, "scheduled"); break;
