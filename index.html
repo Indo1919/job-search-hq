@@ -113,7 +113,7 @@ const nets = () => Object.values(S.data.network);
 const contactsOf = j => Array.isArray(j.contacts) ? j.contacts : [];
 const pending = j => contactsOf(j).filter(c => c.status !== "sent").length;
 const isNYC = j => /new york|nyc|\bny\b|new rochelle|jersey city|brooklyn|manhattan|queens|bronx|hoboken|newark|stamford|white plains|westchester|long island/i.test(j.location||"");
-const isRemote = j => /remote/i.test(`${j.location||""} ${j.workplace||""}`);
+const isSF = j => /san francisco|bay area|oakland|san jose|mountain view|palo alto|menlo park|redwood city|san mateo|sunnyvale|cupertino|santa clara|san carlos|san bruno|berkeley|emeryville|foster city|burlingame|milpitas|fremont/i.test(j.location||""); const isRemote = j => /remote/i.test(`${j.location||""} ${j.workplace||""}`);
 const jobType = j => j.jobType || (/\b(intern|internship|co-op|apprentice)/i.test(j.role||"") ? "Internship" : /part[- ]time/i.test(j.role||"") ? "Part-time" : /contract|freelance/i.test(j.role||"") ? "Contract" : "Full-time");
 const isPT = j => ["Part-time","Contract"].includes(jobType(j));
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
@@ -398,7 +398,7 @@ const f = [
 const fmax = Math.max(1, f[0].n);
 const funnel = f.map((s, i) => `<div class="f-row"><span class="f-label"><i style="background:${s.c}"></i>${s.l}</span><div style="min-width:0"><div class="f-track"><div class="f-fill" style="--w:${(s.n/fmax*100).toFixed(1)}%;background:${s.c}"></div></div>${i < f.length-1 && f[i].n ? `<div class="f-conv">${Math.round((f[i+1].n / f[i].n) * 100)}% move to ${f[i+1].l.toLowerCase()}</div>` : ""}</div><span class="f-n">${s.n}</span></div>`).join("");
 const open = m.open;
-const loc = [{l:"New York area", v:open.filter(isNYC).length, c:"#cecbf7"}, {l:"Remote", v:open.filter(j => !isNYC(j) && isRemote(j)).length, c:"#8f81e5"}, {l:"Other US cities", v:open.filter(j => !isNYC(j) && !isRemote(j)).length, c:"#48484a"}];
+const loc = [{l:"New York area", v:open.filter(isNYC).length, c:"#cecbf7"}, {l:"SF Bay Area", v:open.filter(j => !isNYC(j) && isSF(j)).length, c:"#a99cf0"}, {l:"Remote", v:open.filter(j => !isNYC(j) && !isSF(j) && isRemote(j)).length, c:"#7466d6"}, {l:"Other US cities", v:open.filter(j => !isNYC(j) && !isSF(j) && !isRemote(j)).length, c:"#48484a"}];
 const ng = open.filter(j => j.newGrad).length, early = open.filter(j => j.early).length;
 const list = needs(m);
 const draftsReady = m.drafts.length;
@@ -452,11 +452,11 @@ ${j.note ? `<p class="note">${esc(j.note)}</p>` : ""}
 }
 function viewDiscover(){
 const all = jobs(); const leads = all.filter(j => j.status === "new"), passed = all.filter(j => j.status === "passed");
-const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"elsewhere",l:"Other US cities",n:leads.filter(j=>!isNYC(j)&&!isRemote(j)).length},{k:"intern",l:"Internships",n:leads.filter(j=>jobType(j)==="Internship").length},{k:"pt",l:"Part-time & contract",n:leads.filter(isPT).length},{k:"ft",l:"Full-time",n:leads.filter(j=>jobType(j)==="Full-time").length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
+const chips = [{k:"all",l:"All",n:leads.length},{k:"newgrad",l:"New grad",n:leads.filter(j=>j.newGrad).length},{k:"nyc",l:"NYC",n:leads.filter(isNYC).length},{k:"sf",l:"SF Bay Area",n:leads.filter(isSF).length},{k:"remote",l:"Remote",n:leads.filter(isRemote).length},{k:"elsewhere",l:"Other US cities",n:leads.filter(j=>!isNYC(j)&&!isSF(j)&&!isRemote(j)).length},{k:"intern",l:"Internships",n:leads.filter(j=>jobType(j)==="Internship").length},{k:"pt",l:"Part-time & contract",n:leads.filter(isPT).length},{k:"ft",l:"Full-time",n:leads.filter(j=>jobType(j)==="Full-time").length},{k:"early",l:"Early applicant",n:leads.filter(j=>j.early).length},{k:"passed",l:"Passed",n:passed.length}];
 let list = S.filter === "passed" ? passed : leads;
 if (S.filter === "newgrad") list = list.filter(j => j.newGrad);
 if (S.filter === "nyc") list = list.filter(isNYC);
-if (S.filter === "elsewhere") list = list.filter(j => !isNYC(j) && !isRemote(j));
+if (S.filter === "sf") list = list.filter(isSF); if (S.filter === "elsewhere") list = list.filter(j => !isNYC(j) && !isSF(j) && !isRemote(j));
 if (S.filter === "remote") list = list.filter(isRemote);
 if (S.filter === "early") list = list.filter(j => j.early);
 if (S.filter === "intern") list = list.filter(j => jobType(j) === "Internship");
